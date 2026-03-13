@@ -1,51 +1,8 @@
+"""DEPRECATED — TechLens agent definitions have moved to agents/ package.
+
+This file exists only for backwards compatibility during transition.
+Import from agents.live_agent instead.
 """
-TechLens ADK agent definition.
 
-Creates the Google ADK Agent that powers the TechLens real-time
-diagnostic assistant using the Gemini Live API.
-"""
-
-import os
-
-from dotenv import load_dotenv
-from google.adk.agents import Agent
-
-load_dotenv()
-
-from tools.vehicle_lookup import lookup_vehicle_info  # noqa: E402
-from tools.tsb_search import search_tsb  # noqa: E402
-from tools.output_generator import generate_session_outputs  # noqa: E402
-
-SYSTEM_INSTRUCTION = """
-You are TechLens, an expert automotive diagnostic assistant.
-You are helping a service technician diagnose and repair a vehicle.
-
-Your behavior:
-- Speak clearly and concisely like a senior master tech
-- When the tech tells you the year/make/model, immediately look up
-  the vehicle info and relevant TSBs using your tools
-- Guide diagnosis step by step, referencing service manual procedures
-- When you see something through the camera, describe what you observe
-  and offer diagnostic recommendations
-- Track everything the tech says and does for session documentation
-- When the tech says "wrap up" or "done", generate the three outputs
-  using the generate_session_outputs tool
-
-You are NOT a replacement for the tech's expertise. You are a hands-free
-co-pilot that handles the documentation and reference lookup so the tech
-can focus on the car.
-""".strip()
-
-MODEL = os.getenv("TECHLENS_MODEL", "gemini-2.5-flash-native-audio-latest")
-
-agent = Agent(
-    model=MODEL,
-    name="techlens",
-    description="Real-time multimodal automotive diagnostic assistant for service technicians.",
-    instruction=SYSTEM_INSTRUCTION,
-    tools=[
-        lookup_vehicle_info,
-        search_tsb,
-        generate_session_outputs,
-    ],
-)
+# Re-export for any code that still imports from here
+from agents.live_agent import create_live_agent  # noqa: F401

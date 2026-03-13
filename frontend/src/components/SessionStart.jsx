@@ -8,7 +8,7 @@ const MODELS = {
 
 export default function SessionStart({ onStart }) {
   const [form, setForm] = useState({
-    year: '2024',
+    year: '2023',
     make: 'Subaru',
     model: 'Outback',
     roNumber: '',
