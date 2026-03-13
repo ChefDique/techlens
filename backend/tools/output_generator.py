@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 def generate_session_outputs(
     transcript: str,
-    findings: list,
-    vehicle: dict,
+    findings: list[str],
+    vehicle_summary: str,
 ) -> dict:
     """
     Generate the three TechLens session output documents.
@@ -28,11 +28,9 @@ def generate_session_outputs(
 
     Args:
         transcript: Full text transcript of the technician session.
-        findings:   List of finding dicts, each with keys:
-                      - system (str): e.g. "CVT", "Engine", "Brakes"
-                      - description (str): what was observed or measured
-                      - severity (str): "info" | "warning" | "critical"
-        vehicle:    Vehicle info dict as returned by lookup_vehicle_info().
+        findings:   List of diagnostic finding strings, e.g.
+                    ["Torn CV boot passenger side", "CVT fluid dark, needs replace"]
+        vehicle_summary: One-line vehicle description, e.g. "2024 Subaru Outback"
 
     Returns:
         dict with keys:
@@ -42,19 +40,12 @@ def generate_session_outputs(
           - generated_at (str): ISO 8601 timestamp
           - vehicle_summary (str): One-line vehicle description
     """
-    year = vehicle.get("year", "Unknown")
-    make = vehicle.get("make", "Unknown")
-    model = vehicle.get("model", "Unknown")
-    vehicle_summary = f"{year} {make} {model}"
     generated_at = datetime.now(timezone.utc).isoformat()
 
     # Build findings section
     findings_lines = []
     for i, finding in enumerate(findings, start=1):
-        system = finding.get("system", "General")
-        description = finding.get("description", "No description provided.")
-        severity = finding.get("severity", "info").upper()
-        findings_lines.append(f"  [{severity}] {i}. {system}: {description}")
+        findings_lines.append(f"  {i}. {finding}")
     findings_text = "\n".join(findings_lines) if findings_lines else "  No structured findings recorded."
 
     # ── 1. Tech Notes ──────────────────────────────────────────────────────────
@@ -103,34 +94,18 @@ service advisor. We appreciate your business!
 """
 
     # ── 3. Escalation Brief ────────────────────────────────────────────────────
-    critical_findings = [
-        f for f in findings if f.get("severity", "").lower() == "critical"
-    ]
-    warning_findings = [
-        f for f in findings if f.get("severity", "").lower() == "warning"
-    ]
-
     escalation_brief = f"""ESCALATION BRIEF — TECHLENS
 {'=' * 60}
 Vehicle:     {vehicle_summary}
 Timestamp:   {generated_at}
-Priority:    {'🔴 CRITICAL' if critical_findings else '🟡 REVIEW NEEDED' if warning_findings else '🟢 ROUTINE'}
 
-CRITICAL ITEMS ({len(critical_findings)})
+FINDINGS
 {'-' * 40}
-{''.join(f"  • [{f.get('system','?')}] {f.get('description','')}\n" for f in critical_findings) or '  None'}
-
-WARNINGS ({len(warning_findings)})
-{'-' * 40}
-{''.join(f"  • [{f.get('system','?')}] {f.get('description','')}\n" for f in warning_findings) or '  None'}
+{findings_text}
 
 SESSION CONTEXT
 {'-' * 40}
 {transcript[:500].strip() if transcript else '[No transcript]'}{'...' if len(transcript or '') > 500 else ''}
-
-[TODO — Gemini will populate recommended escalation path, parts pre-order
- suggestions, and flag warranty/recall applicability when production
- integration is complete]
 
 --- End of TechLens Escalation Brief ---
 """

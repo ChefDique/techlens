@@ -10,19 +10,31 @@ import asyncio
 import base64
 import json
 import logging
+import os
 import warnings
 from pathlib import Path
 
+# Load .env BEFORE any Google imports so GOOGLE_API_KEY is available
+# and we can block ADC from interfering with API-key auth.
 from dotenv import load_dotenv
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.middleware.cors import CORSMiddleware
-from google.adk.agents.live_request_queue import LiveRequestQueue
-from google.adk.agents.run_config import RunConfig, StreamingMode
-from google.adk.runners import Runner
-from google.adk.sessions import InMemorySessionService
-from google.genai import types
 
 load_dotenv(Path(__file__).parent / ".env")
+
+# Prevent gRPC from picking up stale Application Default Credentials.
+# Native audio models use gRPC which calls google.auth.default(), finding
+# ~/.config/gcloud/application_default_credentials.json even when we want
+# API-key auth. Point GOOGLE_APPLICATION_CREDENTIALS at a non-existent
+# file so ADC discovery fails and the SDK falls back to the API key.
+if not os.environ.get("GOOGLE_GENAI_USE_VERTEXAI", "").strip() == "1":
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/dev/null/nonexistent"
+
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect  # noqa: E402
+from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
+from google.adk.agents.live_request_queue import LiveRequestQueue  # noqa: E402
+from google.adk.agents.run_config import RunConfig, StreamingMode  # noqa: E402
+from google.adk.runners import Runner  # noqa: E402
+from google.adk.sessions import InMemorySessionService  # noqa: E402
+from google.genai import types  # noqa: E402
 
 # Import agent after loading env vars (model name may come from env)
 from agent import agent  # noqa: E402

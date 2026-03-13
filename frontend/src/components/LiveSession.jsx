@@ -20,7 +20,7 @@ function parseAdkEvent(event) {
   // Text content from model
   if (event.content?.parts) {
     for (const part of event.content.parts) {
-      if (part.text) {
+      if (part.text && !part.thought) {
         results.push({
           type: 'transcript',
           role: event.content.role === 'user' ? 'user' : 'assistant',
@@ -28,59 +28,70 @@ function parseAdkEvent(event) {
           partial: event.partial ?? false,
         })
       }
-      // Inline audio data from model
-      if (part.inline_data?.mime_type?.startsWith('audio/')) {
+      // Inline audio data from model (ADK serializes with camelCase aliases)
+      const inlineData = part.inlineData || part.inline_data
+      if (inlineData?.mimeType?.startsWith('audio/') || inlineData?.mime_type?.startsWith('audio/')) {
         results.push({
           type: 'audio',
-          data: part.inline_data.data,
-          mimeType: part.inline_data.mime_type,
+          data: inlineData.data,
+          mimeType: inlineData.mimeType || inlineData.mime_type,
         })
       }
     }
   }
 
-  // Input transcription (what the user said)
-  if (event.input_transcription) {
-    results.push({
-      type: 'transcript',
-      role: 'user',
-      text: event.input_transcription,
-      partial: false,
-    })
+  // Input transcription (what the user said) — may be camelCase from ADK
+  const inputTranscription = event.inputTranscription || event.input_transcription
+  if (inputTranscription) {
+    const text = typeof inputTranscription === 'string' ? inputTranscription : inputTranscription.text
+    if (text) {
+      results.push({
+        type: 'transcript',
+        role: 'user',
+        text,
+        partial: inputTranscription.finished === false,
+      })
+    }
   }
 
   // Output transcription (what the model said, text version of audio)
-  if (event.output_transcription) {
-    results.push({
-      type: 'transcript',
-      role: 'assistant',
-      text: event.output_transcription,
-      partial: false,
-    })
+  const outputTranscription = event.outputTranscription || event.output_transcription
+  if (outputTranscription) {
+    const text = typeof outputTranscription === 'string' ? outputTranscription : outputTranscription.text
+    if (text) {
+      results.push({
+        type: 'transcript',
+        role: 'assistant',
+        text,
+        partial: outputTranscription.finished === false,
+      })
+    }
   }
 
-  // Function calls (tool use)
+  // Function calls (tool use) — ADK uses camelCase aliases
   if (event.content?.parts) {
     for (const part of event.content.parts) {
-      if (part.function_call) {
+      const fnCall = part.functionCall || part.function_call
+      if (fnCall) {
         results.push({
           type: 'tool_call',
-          name: part.function_call.name,
-          args: part.function_call.args,
+          name: fnCall.name,
+          args: fnCall.args,
         })
       }
-      if (part.function_response) {
+      const fnResp = part.functionResponse || part.function_response
+      if (fnResp) {
         results.push({
           type: 'tool_result',
-          name: part.function_response.name,
-          result: part.function_response.response,
+          name: fnResp.name,
+          result: fnResp.response,
         })
       }
     }
   }
 
-  // Turn complete signal
-  if (event.turn_complete) {
+  // Turn complete signal (camelCase from ADK)
+  if (event.turnComplete || event.turn_complete) {
     results.push({ type: 'turn_complete' })
   }
 
@@ -119,18 +130,31 @@ export default function LiveSession({ sessionData, onEnd }) {
     }
   }, [connectionState])
 
+  // Accumulate streaming transcriptions
+  const pendingRef = useRef({ user: '', assistant: '' })
+
   // Process incoming ADK events
   useEffect(() => {
     if (!lastEvent) return
 
     const parsed = parseAdkEvent(lastEvent)
     for (const item of parsed) {
-      if (item.type === 'transcript' && !item.partial) {
-        setTranscript((prev) => [...prev, {
-          role: item.role,
-          text: item.text,
-          id: Date.now() + Math.random(),
-        }])
+      if (item.type === 'transcript') {
+        // Accumulate transcription text until turn completes
+        pendingRef.current[item.role] += item.text
+      } else if (item.type === 'turn_complete') {
+        // Flush accumulated transcription as complete messages
+        for (const role of ['user', 'assistant']) {
+          const text = pendingRef.current[role].trim()
+          if (text) {
+            setTranscript((prev) => [...prev, {
+              role,
+              text,
+              id: Date.now() + Math.random(),
+            }])
+          }
+          pendingRef.current[role] = ''
+        }
       } else if (item.type === 'tool_call') {
         setTranscript((prev) => [...prev, {
           role: 'tool',

@@ -36,7 +36,7 @@ co-pilot that handles the documentation and reference lookup so the tech
 can focus on the car.
 """.strip()
 
-MODEL = os.getenv("TECHLENS_MODEL", "gemini-2.0-flash-live-preview-04-09")
+MODEL = os.getenv("TECHLENS_MODEL", "gemini-2.5-flash-native-audio-latest")
 
 agent = Agent(
     model=MODEL,
