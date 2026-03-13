@@ -103,6 +103,11 @@ export default function LiveSession({ sessionData, onEnd }) {
   const [isSpeakerActive, setIsSpeakerActive] = useState(true)
   const [transcript, setTranscript] = useState([])
   const [isEnding, setIsEnding] = useState(false)
+  const [intakeStatus, setIntakeStatus] = useState('pending') // 'pending' | 'loading' | 'ready'
+  const [intakeContext, setIntakeContext] = useState(null)
+  const [cameraCountdown, setCameraCountdown] = useState(null)
+  const cameraTimerRef = useRef(null)
+  const countdownIntervalRef = useRef(null)
   const transcriptEndRef = useRef(null)
   const audioContextRef = useRef(null)
 
@@ -136,6 +141,30 @@ export default function LiveSession({ sessionData, onEnd }) {
   // Process incoming ADK events
   useEffect(() => {
     if (!lastEvent) return
+
+    // Handle orchestrator events (not ADK events)
+    if (lastEvent.type === 'intake_started') {
+      setIntakeStatus('loading')
+      return
+    }
+    if (lastEvent.type === 'intake_complete') {
+      setIntakeStatus('ready')
+      setIntakeContext(lastEvent.context)
+      return
+    }
+    if (lastEvent.type === 'generating_outputs') {
+      setIsEnding(true)
+      setTranscript((prev) => [...prev, {
+        role: 'assistant',
+        text: 'Generating session documents...',
+        id: Date.now(),
+      }])
+      return
+    }
+    if (lastEvent.type === 'session_outputs') {
+      onEnd(lastEvent.outputs)
+      return
+    }
 
     const parsed = parseAdkEvent(lastEvent)
     for (const item of parsed) {
@@ -181,6 +210,14 @@ export default function LiveSession({ sessionData, onEnd }) {
     transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [transcript])
 
+  // Cleanup camera timers on unmount
+  useEffect(() => {
+    return () => {
+      if (cameraTimerRef.current) clearTimeout(cameraTimerRef.current)
+      if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current)
+    }
+  }, [])
+
   /** Play base64-encoded audio from the model */
   function playAudioChunk(b64Data, mimeType) {
     try {
@@ -223,8 +260,39 @@ export default function LiveSession({ sessionData, onEnd }) {
   function handleCameraToggle() {
     if (isCameraActive) {
       stopCamera()
+      sendMessage({ type: 'camera_stopped' })
+      setCameraCountdown(null)
+      if (cameraTimerRef.current) {
+        clearTimeout(cameraTimerRef.current)
+        cameraTimerRef.current = null
+      }
+      if (countdownIntervalRef.current) {
+        clearInterval(countdownIntervalRef.current)
+        countdownIntervalRef.current = null
+      }
     } else {
       startCamera()
+      setCameraCountdown(15)
+      countdownIntervalRef.current = setInterval(() => {
+        setCameraCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(countdownIntervalRef.current)
+            countdownIntervalRef.current = null
+            return null
+          }
+          return prev - 1
+        })
+      }, 1000)
+      cameraTimerRef.current = setTimeout(() => {
+        stopCamera()
+        sendMessage({ type: 'camera_stopped' })
+        setCameraCountdown(null)
+        if (countdownIntervalRef.current) {
+          clearInterval(countdownIntervalRef.current)
+          countdownIntervalRef.current = null
+        }
+        cameraTimerRef.current = null
+      }, 15000)
     }
   }
 
@@ -234,11 +302,6 @@ export default function LiveSession({ sessionData, onEnd }) {
     stopCamera()
     setIsMicActive(false)
     sendMessage({ type: 'end_session' })
-    setTranscript((prev) => [...prev, {
-      role: 'assistant',
-      text: 'Generating session outputs...',
-      id: Date.now(),
-    }])
   }
 
   const statusColor = {
@@ -248,13 +311,24 @@ export default function LiveSession({ sessionData, onEnd }) {
   }[connectionState] ?? 'text-gray-400'
 
   return (
-    <div className="h-full flex flex-col lg:flex-row gap-0 overflow-hidden">
+    <div className="h-full flex flex-col lg:flex-row gap-0 overflow-hidden relative">
+      {intakeStatus !== 'ready' && (
+        <div className="absolute inset-0 bg-gray-900/90 z-10 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4" />
+            <p className="text-lg text-white">Analyzing vehicle data...</p>
+            <p className="text-sm text-gray-400 mt-1">Preparing diagnostic context</p>
+          </div>
+        </div>
+      )}
+
       {/* Left panel: camera + controls */}
       <div className="lg:w-96 xl:w-[420px] flex flex-col gap-4 p-4 border-b lg:border-b-0 lg:border-r border-gray-700 shrink-0">
         <CameraFeed
           isActive={isCameraActive}
           onToggle={handleCameraToggle}
           stream={cameraStream}
+          autoStopSeconds={cameraCountdown}
         />
 
         <AudioControls
@@ -284,6 +358,13 @@ export default function LiveSession({ sessionData, onEnd }) {
             </span>
           </div>
         </div>
+
+        {intakeContext && !intakeContext.error && (
+          <div className="bg-gray-800 rounded-xl px-5 py-3 border border-gray-700 text-sm text-gray-300">
+            <div className="font-medium text-white mb-1">Session Ready</div>
+            <div>{intakeContext.tsb_count} TSBs loaded, {intakeContext.issue_count} known issues</div>
+          </div>
+        )}
 
         {/* End session */}
         <button

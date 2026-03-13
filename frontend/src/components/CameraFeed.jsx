@@ -1,11 +1,14 @@
 import { useEffect, useRef } from 'react'
 
-export default function CameraFeed({ onFrame, isActive, onToggle, stream }) {
+export default function CameraFeed({ isActive, onToggle, stream, autoStopSeconds = null }) {
   const videoRef = useRef(null)
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.srcObject = stream ?? null
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream
+      videoRef.current.play().catch(() => {})
+    } else if (videoRef.current) {
+      videoRef.current.srcObject = null
     }
   }, [stream])
 
@@ -33,6 +36,11 @@ export default function CameraFeed({ onFrame, isActive, onToggle, stream }) {
           <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-black/60 px-2.5 py-1 rounded-full text-xs text-green-400">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
             LIVE
+          </div>
+        )}
+        {isActive && autoStopSeconds !== null && (
+          <div className="absolute top-3 right-3 bg-black/60 px-2.5 py-1 rounded-full text-xs text-yellow-400 font-mono">
+            {autoStopSeconds}s
           </div>
         )}
       </div>
