@@ -1,94 +1,121 @@
 # TechLens
 
-**AI-powered voice and video diagnosis for technical support and device troubleshooting.**
+**AI Diagnostic Copilot for Auto Repair Technicians** — Real-time voice + camera diagnosis with automated documentation.
 
-## Problem Statement
+## What It Does
 
-Tech support documentation is fragmented, outdated, and often inaccessible to users who need it most. TechLens bridges this gap by enabling users to describe their device or software issues verbally and visually, receiving instant, AI-powered diagnostic insights without navigating complex knowledge bases.
+A technician walks up to a car, opens TechLens on their phone, and starts talking. The AI already knows the vehicle's TSBs, known issues, and NHTSA complaint patterns. When they need the AI to look at something — a corroded connector, a torn CV boot — they tap the camera button. TechLens sees it, correlates it with known issues, and guides next steps. When done, three documents are generated automatically: Tech Notes, Customer Summary, and Escalation Brief.
 
-## Features
+## Architecture — Three-Agent Pipeline
 
-- **Voice + Camera Diagnosis**: Describe issues in natural language while showing your device via camera for real-time AI analysis
-- **Technical Support Lookup**: Instantly retrieve relevant technical support bulletins and troubleshooting guides
-- **3 Auto-Generated Outputs**: Diagnosis summary, step-by-step fixes, and escalation recommendations
+```
+SessionStart form → INTAKE AGENT (gemini-2.5-flash) → context package
+                         ↓
+                    LIVE AGENT (Gemini Live API, bidi-streaming) ← voice + camera
+                         ↓
+                    WRITER AGENT (gemini-2.5-flash) → Tech Notes, Customer Summary, Escalation Brief
+```
 
-## Architecture
+### Three-State Session Model
 
-TechLens uses a multi-tier architecture:
+| State | What's happening | Tokens |
+|-------|-----------------|--------|
+| **IDLE** | WebSocket alive, no streaming | Zero |
+| **LISTENING** | Audio streaming to Gemini Live | Audio only |
+| **LOOKING** | Audio + video (1 FPS JPEG, 15s auto-stop) | Audio + vision |
 
-1. **Frontend (React + Vite)**: Real-time voice capture and camera streaming UI
-2. **Backend (FastAPI on Cloud Run)**: Orchestrates API calls and manages diagnostic workflows
-3. **Gemini Live API**: Processes real-time voice/video streams with agentic capabilities
-4. **Firestore**: Stores diagnostic history and support bulletins for TSB lookup
+### Agent Roles
 
-Data flows from the frontend through secure WebSocket connections to the backend, which streams audio/video to Gemini Live API. The AI agent performs TSB lookups, generates diagnostics, and returns structured recommendations back to the frontend.
+- **Intake Agent** — Runs once at session start. Queries the 70KB knowledge base for vehicle-specific TSBs, known issues, and NHTSA complaints. Calls Gemini to synthesize a diagnostic context package.
+- **Live Agent** — Real-time voice + vision copilot via Gemini Live API (ADK bidi-streaming). System instruction is dynamically injected with Intake context. Has tools for KB search and finding logging.
+- **Writer Agent** — Runs once after session ends. Takes the full transcript + findings and generates three polished documents via Gemini.
 
 ## Tech Stack
 
-- **Frontend**: React, Vite, Tailwind CSS, JavaScript
-- **Backend**: FastAPI, Python 3.12, uvicorn
-- **AI/ML**: Google Gemini Live API, Google Generative AI SDK
-- **Cloud**: Google Cloud Run, Cloud Build, Firestore
-- **Communication**: WebSockets
+- **Backend:** Python 3.12, FastAPI, Google ADK (`google-adk`), Google GenAI SDK (`google-genai`)
+- **Frontend:** React 19, Vite, Tailwind CSS v4
+- **AI:** Gemini Live API via ADK (model: `gemini-2.5-flash-native-audio-latest`)
+- **Data:** In-memory JSON knowledge base (70KB, 3 Subaru vehicles, 8 TSBs, 175 NHTSA complaints)
+- **Deploy:** Cloud Run + Firestore (session persistence)
 
 ## Quick Start
 
 ### Prerequisites
-- Python 3.12+ (backend)
-- Node.js 18+ (frontend)
-- Google Cloud SDK (`gcloud` CLI)
-- GCP project with Firestore and Generative AI APIs enabled
+- Python 3.12+
+- Node.js 18+
+- Google AI Studio API key
 
-### Local Development
-
-**Backend:**
+### Backend
 ```bash
 cd backend
+python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+cp .env.example .env  # Add your GOOGLE_API_KEY
 uvicorn main:app --reload --port 8080
 ```
 
-The backend will be available at `http://localhost:8080`
-
-**Frontend:**
+### Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-The frontend will be available at `http://localhost:5173`
+Open `http://localhost:5173`, fill in vehicle info (2023 Subaru Outback recommended — best KB coverage), and start a session.
+
+## Project Structure
+
+```
+techlens/
+├── backend/
+│   ├── main.py                 # FastAPI WebSocket orchestrator (state machine)
+│   ├── agents/
+│   │   ├── intake_agent.py     # Pre-filters KB, synthesizes context
+│   │   ├── live_agent.py       # Real-time voice+vision ADK agent
+│   │   └── writer_agent.py     # Post-session document generation
+│   ├── tools/
+│   │   ├── knowledge_base.py   # Unified KB search (in-memory JSON)
+│   │   ├── vehicle_lookup.py   # Firestore-with-stub vehicle queries
+│   │   └── tsb_search.py       # Firestore-with-stub TSB search
+│   ├── models/
+│   │   └── session_state.py    # SessionPhase enum, IntakeContext, SessionTranscript
+│   └── Dockerfile
+├── frontend/
+│   └── src/
+│       ├── App.jsx             # Phase state machine (setup→active→review)
+│       ├── components/         # SessionStart, LiveSession, AudioControls, CameraFeed, SessionOutputs
+│       └── hooks/              # useWebSocket, useAudioStream, useCameraStream
+└── test_knowledgebase/
+    └── techlens_knowledge_base.json  # Primary KB (3 vehicles, 14 issues, 8 TSBs)
+```
+
+## Environment Variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `GOOGLE_API_KEY` | Yes | — | Google AI Studio API key |
+| `TECHLENS_MODEL` | No | `gemini-2.5-flash-native-audio-latest` | Live agent model |
+| `TECHLENS_INTAKE_MODEL` | No | `gemini-2.5-flash` | Intake agent model |
+| `TECHLENS_WRITER_MODEL` | No | `gemini-2.5-flash` | Writer agent model |
+| `GOOGLE_GENAI_USE_VERTEXAI` | No | `0` | Set to `1` for Vertex AI auth |
 
 ## Deployment
 
-Deploy the backend to Google Cloud Run using the provided deployment script:
+Build from project root (not backend/):
+```bash
+docker build -f backend/Dockerfile -t techlens-backend .
+```
 
+Deploy to Cloud Run:
 ```bash
 ./deploy.sh --project YOUR_GCP_PROJECT_ID --region us-central1
 ```
 
-The script will:
-1. Build a Docker image using Cloud Build
-2. Push the image to Google Container Registry
-3. Deploy to Cloud Run with public, unauthenticated access
-4. Output the service URL on success
-
-For usage details: `./deploy.sh --help` or see [deploy.sh](./deploy.sh)
-
-## Environment Variables
-
-Backend requires:
-- `GOOGLE_API_KEY`: Google Generative AI API key
-- `GOOGLE_APPLICATION_CREDENTIALS`: Path to GCP service account JSON (for Firestore)
-- `FIRESTORE_PROJECT_ID`: GCP project ID (optional, auto-detected from credentials)
-
-See `.env.example` or `backend/main.py` for configuration details.
-
 ## Contest
 
-TechLens is built for the **Gemini Live Agent Challenge** by **Adair Labs**.
+Built for the **Gemini Live Agent Challenge** by **Adair Labs**.
 
-This project demonstrates agentic AI workflows using Google's latest multimodal capabilities to solve real-world technical support challenges.
+Demonstrates: Gemini model + Google GenAI SDK + ADK + GCP service (Cloud Run/Firestore) — real-time multimodal AI solving a real-world problem for auto repair technicians.
 
 ## License
 
