@@ -31,16 +31,46 @@ def get_vehicle_profile(year: int, make: str, model: str) -> dict | None:
 
 
 def get_matching_tsbs(year: int, make: str, model: str, keywords: list[str] | None = None) -> list[dict]:
-    """Find TSBs applicable to a vehicle. Optionally filter by keywords."""
+    """Find TSBs applicable to a vehicle. Optionally filter by keywords.
+
+    Handles two affected_vehicles formats:
+      - String: "2023 Outback" or "2021-2023 Outback"
+      - Dict: {"make": "Subaru", "models": ["Outback"], "years": [2021, 2022, 2023]}
+    """
     results = []
     for tsb in _KB.get("tsbs", []):
         affected = tsb.get("affected_vehicles", [])
-        match = any(
-            av.get("make", "").lower() == make.lower()
-            and model.lower() in [m.lower() for m in av.get("models", [])]
-            and year in av.get("years", [])
-            for av in affected
-        )
+        match = False
+        for av in affected:
+            if isinstance(av, str):
+                # Parse string format: "YYYY Model" or "YYYY-YYYY Model"
+                av_lower = av.lower()
+                if model.lower() in av_lower:
+                    # Check year range
+                    parts = av_lower.split()
+                    if parts:
+                        year_part = parts[0]
+                        if "-" in year_part:
+                            try:
+                                y_start, y_end = year_part.split("-", 1)
+                                if int(y_start) <= year <= int(y_end):
+                                    match = True
+                                    break
+                            except (ValueError, AttributeError):
+                                pass
+                        else:
+                            try:
+                                if int(year_part) == year:
+                                    match = True
+                                    break
+                            except ValueError:
+                                pass
+            elif isinstance(av, dict):
+                if (av.get("make", "").lower() == make.lower()
+                        and model.lower() in [m.lower() for m in av.get("models", [])]
+                        and year in av.get("years", [])):
+                    match = True
+                    break
         if not match:
             continue
         if keywords:
