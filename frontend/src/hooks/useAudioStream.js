@@ -21,7 +21,12 @@ function int16ToBase64(int16Array) {
   return btoa(binary)
 }
 
-export default function useAudioStream({ onChunk } = {}) {
+/**
+ * @param {Object} opts
+ * @param {Function} opts.onChunk - called with base64 string (legacy)
+ * @param {Function} opts.onBinary - called with ArrayBuffer (preferred for binary WS)
+ */
+export default function useAudioStream({ onChunk, onBinary } = {}) {
   const [isCapturing, setIsCapturing] = useState(false)
   const [audioLevel, setAudioLevel] = useState(0)
   const streamRef = useRef(null)
@@ -74,8 +79,12 @@ export default function useAudioStream({ onChunk } = {}) {
         }
         bufferRef.current = []
         const int16 = float32ToInt16(combined)
-        const b64 = int16ToBase64(int16)
-        onChunk?.(b64)
+        if (onBinary) {
+          onBinary(int16.buffer)
+        } else {
+          const b64 = int16ToBase64(int16)
+          onChunk?.(b64)
+        }
       }, CHUNK_INTERVAL_MS)
 
       setIsCapturing(true)

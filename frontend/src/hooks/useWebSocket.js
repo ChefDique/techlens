@@ -3,19 +3,26 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 const RECONNECT_DELAY = 2000
 const MAX_RECONNECT_ATTEMPTS = 5
 
-export default function useWebSocket(path) {
+/**
+ * WebSocket hook for ADK bidi-streaming.
+ *
+ * @param {string} userId - User identifier for the session
+ * @param {string} sessionId - Session identifier
+ */
+export default function useWebSocket(userId, sessionId) {
   const [connectionState, setConnectionState] = useState('disconnected')
-  const [lastMessage, setLastMessage] = useState(null)
+  const [lastEvent, setLastEvent] = useState(null)
   const wsRef = useRef(null)
   const reconnectAttemptsRef = useRef(0)
   const reconnectTimerRef = useRef(null)
   const mountedRef = useRef(true)
 
   const connect = useCallback(() => {
+    if (!userId || !sessionId) return
     if (wsRef.current?.readyState === WebSocket.OPEN) return
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const url = `${protocol}//${window.location.host}${path}`
+    const url = `${protocol}//${window.location.host}/ws/${userId}/${sessionId}`
 
     setConnectionState('connecting')
     const ws = new WebSocket(url)
@@ -30,10 +37,10 @@ export default function useWebSocket(path) {
     ws.onmessage = (event) => {
       if (!mountedRef.current) return
       try {
-        const msg = JSON.parse(event.data)
-        setLastMessage(msg)
+        const parsed = JSON.parse(event.data)
+        setLastEvent(parsed)
       } catch {
-        setLastMessage({ type: 'raw', data: event.data })
+        // Binary or non-JSON — ignore
       }
     }
 
@@ -51,19 +58,27 @@ export default function useWebSocket(path) {
     ws.onerror = () => {
       ws.close()
     }
-  }, [path])
+  }, [userId, sessionId])
 
   const disconnect = useCallback(() => {
     clearTimeout(reconnectTimerRef.current)
-    reconnectAttemptsRef.current = MAX_RECONNECT_ATTEMPTS // prevent auto-reconnect
+    reconnectAttemptsRef.current = MAX_RECONNECT_ATTEMPTS
     wsRef.current?.close()
     wsRef.current = null
     setConnectionState('disconnected')
   }, [])
 
+  /** Send a JSON text frame */
   const sendMessage = useCallback((data) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(data))
+    }
+  }, [])
+
+  /** Send raw binary audio bytes */
+  const sendBinary = useCallback((arrayBuffer) => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(arrayBuffer)
     }
   }, [])
 
@@ -77,5 +92,5 @@ export default function useWebSocket(path) {
     }
   }, [connect])
 
-  return { sendMessage, lastMessage, connectionState, connect, disconnect }
+  return { sendMessage, sendBinary, lastEvent, connectionState, connect, disconnect }
 }
