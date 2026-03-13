@@ -12,6 +12,9 @@ logger = logging.getLogger(__name__)
 
 # Load KB once at import
 _KB_PATH = Path(__file__).parent.parent.parent / "test_knowledgebase" / "techlens_knowledge_base.json"
+if not _KB_PATH.exists():
+    # Docker layout: /app/test_knowledgebase/
+    _KB_PATH = Path("/app/test_knowledgebase/techlens_knowledge_base.json")
 _KB = {}
 
 try:
