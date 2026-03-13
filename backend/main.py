@@ -1,9 +1,9 @@
 """
-TechLens FastAPI application.
+TechLens FastAPI application — Three-agent orchestrator.
 
 Provides:
   GET  /health              — liveness probe for Cloud Run
-  WS   /ws/{user_id}/{sid}  — bidirectional streaming via ADK + Gemini Live API
+  WS   /ws/{user_id}/{sid}  — bidirectional streaming with Intake → Live → Writer pipeline
 """
 
 import asyncio
@@ -14,17 +14,11 @@ import os
 import warnings
 from pathlib import Path
 
-# Load .env BEFORE any Google imports so GOOGLE_API_KEY is available
-# and we can block ADC from interfering with API-key auth.
 from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).parent / ".env")
 
-# Prevent gRPC from picking up stale Application Default Credentials.
-# Native audio models use gRPC which calls google.auth.default(), finding
-# ~/.config/gcloud/application_default_credentials.json even when we want
-# API-key auth. Point GOOGLE_APPLICATION_CREDENTIALS at a non-existent
-# file so ADC discovery fails and the SDK falls back to the API key.
+# Prevent gRPC from picking up stale ADC when using API-key auth.
 if not os.environ.get("GOOGLE_GENAI_USE_VERTEXAI", "").strip() == "1":
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/dev/null/nonexistent"
 
@@ -36,214 +30,227 @@ from google.adk.runners import Runner  # noqa: E402
 from google.adk.sessions import InMemorySessionService  # noqa: E402
 from google.genai import types  # noqa: E402
 
-# Import agent after loading env vars (model name may come from env)
-from agent import agent  # noqa: E402
+from agents.intake_agent import run_intake  # noqa: E402
+from agents.live_agent import create_live_agent  # noqa: E402
+from agents.writer_agent import run_writer  # noqa: E402
+from models.session_state import SessionPhase, SessionTranscript  # noqa: E402
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger(__name__)
-
-# Suppress Pydantic serialization warnings from ADK events
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
-
-# ---------------------------------------------------------------------------
-# Application Initialization (once at startup)
-# ---------------------------------------------------------------------------
 
 APP_NAME = "techlens"
 
-app = FastAPI(
-    title="TechLens API",
-    description="Real-time multimodal AI assistant for auto repair technicians.",
-    version="0.1.0",
-)
+app = FastAPI(title="TechLens API", description="Real-time multimodal AI assistant for auto repair technicians.", version="0.2.0")
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-session_service = InMemorySessionService()
-runner = Runner(app_name=APP_NAME, agent=agent, session_service=session_service)
-
-
-# ---------------------------------------------------------------------------
-# REST endpoints
-# ---------------------------------------------------------------------------
 
 @app.get("/health")
 async def health_check():
-    """Liveness / readiness probe for Cloud Run."""
-    return {"status": "ok", "service": "techlens-backend"}
+    return {"status": "ok", "service": "techlens-backend", "version": "0.2.0"}
 
-
-# ---------------------------------------------------------------------------
-# WebSocket endpoint — ADK bidi-streaming
-# ---------------------------------------------------------------------------
 
 @app.websocket("/ws/{user_id}/{session_id}")
-async def websocket_endpoint(
-    websocket: WebSocket,
-    user_id: str,
-    session_id: str,
-) -> None:
-    """Bidirectional streaming WebSocket endpoint for TechLens sessions.
+async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str) -> None:
+    """Three-agent pipeline WebSocket endpoint.
 
-    The frontend sends:
-      - JSON text frames: { type: "start_session"|"text"|"end_session", ... }
-      - JSON text frames with audio: { type: "audio", data: <base64 PCM 16kHz> }
-      - JSON text frames with video: { type: "video_frame", data: <base64 JPEG> }
-
-    The server streams back ADK events (transcripts, audio, tool calls, etc.)
-    as JSON text frames.
+    Flow: start_session → Intake agent → Live agent (streaming) → end_session → Writer agent
     """
     await websocket.accept()
     logger.info("WebSocket connected: user=%s session=%s", user_id, session_id)
 
-    # ------------------------------------------------------------------
-    # Session Initialization
-    # ------------------------------------------------------------------
+    phase = SessionPhase.IDLE
+    intake_context = None
+    transcript = SessionTranscript()
+    live_queue = None
+    live_events_task = None
 
-    # Determine response modality from model name
-    model_name = agent.model
-    is_native_audio = "native-audio" in model_name.lower()
+    async def send_event(event_type: str, data: dict | None = None):
+        """Send a typed JSON event to the frontend."""
+        msg = {"type": event_type}
+        if data:
+            msg.update(data)
+        await websocket.send_text(json.dumps(msg))
 
-    if is_native_audio:
-        run_config = RunConfig(
-            streaming_mode=StreamingMode.BIDI,
-            response_modalities=["AUDIO"],
-            input_audio_transcription=types.AudioTranscriptionConfig(),
-            output_audio_transcription=types.AudioTranscriptionConfig(),
-        )
-    else:
-        # Half-cascade models (like gemini-2.0-flash-live-preview)
-        # support both TEXT and AUDIO — default to AUDIO for voice UX
-        run_config = RunConfig(
-            streaming_mode=StreamingMode.BIDI,
-            response_modalities=["AUDIO"],
-            input_audio_transcription=types.AudioTranscriptionConfig(),
-            output_audio_transcription=types.AudioTranscriptionConfig(),
-        )
+    async def run_live_downstream(runner: Runner, ws: WebSocket):
+        """Receive ADK events from run_live() and forward to WebSocket + transcript."""
+        async for event in runner.run_live(
+            user_id=user_id,
+            session_id=session_id,
+            live_request_queue=live_queue,
+            run_config=RunConfig(
+                streaming_mode=StreamingMode.BIDI,
+                response_modalities=["AUDIO"],
+                input_audio_transcription=types.AudioTranscriptionConfig(),
+                output_audio_transcription=types.AudioTranscriptionConfig(),
+            ),
+        ):
+            # Forward full event to frontend
+            event_json = event.model_dump_json(exclude_none=True, by_alias=True)
+            await ws.send_text(event_json)
 
-    # Get or create ADK session
-    session = await session_service.get_session(
-        app_name=APP_NAME, user_id=user_id, session_id=session_id
-    )
-    if not session:
-        await session_service.create_session(
-            app_name=APP_NAME, user_id=user_id, session_id=session_id
-        )
+            # Accumulate transcriptions for the Writer agent
+            input_t = getattr(event, "input_transcription", None)
+            if input_t:
+                text = input_t.text if hasattr(input_t, "text") else str(input_t)
+                if text and not getattr(input_t, "partial", False):
+                    transcript.add("user", text)
 
-    live_request_queue = LiveRequestQueue()
+            output_t = getattr(event, "output_transcription", None)
+            if output_t:
+                text = output_t.text if hasattr(output_t, "text") else str(output_t)
+                if text and not getattr(output_t, "partial", False):
+                    transcript.add("assistant", text)
 
-    # ------------------------------------------------------------------
-    # Concurrent upstream / downstream tasks
-    # ------------------------------------------------------------------
+            # Capture logged findings from tool calls
+            if event.content and event.content.parts:
+                for part in event.content.parts:
+                    fn_resp = getattr(part, "function_response", None)
+                    if fn_resp and fn_resp.name == "log_finding":
+                        resp_data = fn_resp.response if isinstance(fn_resp.response, dict) else {}
+                        if resp_data.get("status") == "logged":
+                            transcript.add_finding(
+                                description=resp_data.get("description", ""),
+                                component=resp_data.get("component", ""),
+                                severity=resp_data.get("severity", "medium"),
+                            )
 
-    async def upstream_task() -> None:
-        """Receive messages from WebSocket → forward to LiveRequestQueue."""
+    try:
         while True:
             message = await websocket.receive()
 
-            # Binary frames — raw audio bytes
+            # --- Binary frames: raw audio → Live agent ---
             if "bytes" in message:
-                audio_blob = types.Blob(
-                    mime_type="audio/pcm;rate=16000",
-                    data=message["bytes"],
-                )
-                live_request_queue.send_realtime(audio_blob)
+                if live_queue and phase in (SessionPhase.LISTENING, SessionPhase.LOOKING):
+                    audio_blob = types.Blob(mime_type="audio/pcm;rate=16000", data=message["bytes"])
+                    live_queue.send_realtime(audio_blob)
                 continue
 
-            # Text frames — JSON messages
             if "text" not in message:
                 continue
 
             try:
                 msg = json.loads(message["text"])
             except json.JSONDecodeError:
-                logger.warning("Received non-JSON text frame, ignoring")
                 continue
 
             msg_type = msg.get("type")
 
+            # --- Start session: run Intake agent ---
             if msg_type == "start_session":
-                # Send vehicle context as the opening text message
                 vehicle = msg.get("vehicle", {})
-                ro = msg.get("ro_number", "")
-                concern = msg.get("customer_concern", "")
-                prompt = (
-                    f"I'm working on a {vehicle.get('year')} {vehicle.get('make')} "
-                    f"{vehicle.get('model')}, RO number {ro}. "
-                    f"Customer concern: {concern}. "
-                    f"Look up the vehicle info and any relevant TSBs."
-                )
-                content = types.Content(
-                    parts=[types.Part(text=prompt)]
-                )
-                live_request_queue.send_content(content)
+                await send_event("intake_started")
 
+                try:
+                    intake_context = await run_intake(
+                        year=int(vehicle.get("year", 0)),
+                        make=vehicle.get("make", ""),
+                        model=vehicle.get("model", ""),
+                        ro_number=msg.get("ro_number", ""),
+                        customer_concern=msg.get("customer_concern", ""),
+                    )
+                    await send_event("intake_complete", {"context": {
+                        "customer_concern_analysis": intake_context.get("customer_concern_analysis", ""),
+                        "suggested_diagnostic_flow": intake_context.get("suggested_diagnostic_flow", []),
+                        "tsb_count": len(intake_context.get("relevant_tsbs", [])),
+                        "issue_count": len(intake_context.get("relevant_issues", [])),
+                    }})
+                except Exception as e:
+                    logger.error("Intake agent failed: %s", e)
+                    intake_context = {
+                        "vehicle": vehicle,
+                        "ro_number": msg.get("ro_number", ""),
+                        "customer_concern": msg.get("customer_concern", ""),
+                        "relevant_tsbs": [],
+                        "relevant_issues": [],
+                    }
+                    await send_event("intake_complete", {"context": {"error": str(e)}})
+
+                # Create Live agent with intake context and start streaming
+                live_agent = create_live_agent(intake_context)
+                session_service = InMemorySessionService()
+                runner = Runner(app_name=APP_NAME, agent=live_agent, session_service=session_service)
+
+                session = await session_service.get_session(app_name=APP_NAME, user_id=user_id, session_id=session_id)
+                if not session:
+                    await session_service.create_session(app_name=APP_NAME, user_id=user_id, session_id=session_id)
+
+                live_queue = LiveRequestQueue()
+                live_events_task = asyncio.create_task(run_live_downstream(runner, websocket))
+                phase = SessionPhase.LISTENING
+                logger.info("Live agent started, phase=LISTENING")
+
+            # --- Text message to Live agent ---
             elif msg_type == "text":
-                content = types.Content(
-                    parts=[types.Part(text=msg.get("text", ""))]
-                )
-                live_request_queue.send_content(content)
+                if live_queue and phase != SessionPhase.IDLE:
+                    content = types.Content(parts=[types.Part(text=msg.get("text", ""))])
+                    live_queue.send_content(content)
 
+            # --- Audio (base64 fallback path) ---
             elif msg_type == "audio":
-                # Base64-encoded PCM audio from frontend
-                audio_bytes = base64.b64decode(msg.get("data", ""))
-                audio_blob = types.Blob(
-                    mime_type="audio/pcm;rate=16000",
-                    data=audio_bytes,
-                )
-                live_request_queue.send_realtime(audio_blob)
+                if live_queue and phase != SessionPhase.IDLE:
+                    audio_bytes = base64.b64decode(msg.get("data", ""))
+                    audio_blob = types.Blob(mime_type="audio/pcm;rate=16000", data=audio_bytes)
+                    live_queue.send_realtime(audio_blob)
 
+            # --- Video frame ---
             elif msg_type == "video_frame":
-                # Base64-encoded JPEG frame from frontend camera
-                image_bytes = base64.b64decode(msg.get("data", ""))
-                image_blob = types.Blob(
-                    mime_type="image/jpeg",
-                    data=image_bytes,
-                )
-                live_request_queue.send_realtime(image_blob)
+                if live_queue and phase in (SessionPhase.LISTENING, SessionPhase.LOOKING):
+                    image_bytes = base64.b64decode(msg.get("data", ""))
+                    image_blob = types.Blob(mime_type="image/jpeg", data=image_bytes)
+                    live_queue.send_realtime(image_blob)
+                    if phase == SessionPhase.LISTENING:
+                        phase = SessionPhase.LOOKING
+                        logger.info("Phase transition: LISTENING → LOOKING")
 
+            # --- Camera stopped ---
+            elif msg_type == "camera_stopped":
+                if phase == SessionPhase.LOOKING:
+                    phase = SessionPhase.LISTENING
+                    logger.info("Phase transition: LOOKING → LISTENING")
+
+            # --- End session: close Live agent, run Writer ---
             elif msg_type == "end_session":
-                # Ask the agent to wrap up and generate outputs
-                content = types.Content(
-                    parts=[types.Part(text=(
-                        "The technician is done. Wrap up this session and "
-                        "generate the three output documents: tech notes, "
-                        "customer summary, and escalation brief."
-                    ))]
-                )
-                live_request_queue.send_content(content)
+                logger.info("End session requested")
+                await send_event("generating_outputs")
+
+                # Close the Live agent
+                if live_queue:
+                    live_queue.close()
+                if live_events_task:
+                    try:
+                        await asyncio.wait_for(live_events_task, timeout=5.0)
+                    except (asyncio.TimeoutError, Exception):
+                        live_events_task.cancel()
+
+                phase = SessionPhase.IDLE
+
+                # Run Writer agent
+                try:
+                    outputs = await run_writer(
+                        transcript_text=transcript.to_text(),
+                        intake_context=intake_context or {},
+                        findings=transcript.findings,
+                    )
+                    await send_event("session_outputs", {"outputs": outputs})
+                except Exception as e:
+                    logger.error("Writer agent failed: %s", e)
+                    await send_event("session_outputs", {"outputs": {
+                        "tech_notes": f"Error generating outputs: {e}",
+                        "customer_summary": "",
+                        "escalation_brief": "",
+                    }})
 
             else:
                 logger.warning("Unknown message type: %s", msg_type)
 
-    async def downstream_task() -> None:
-        """Receive ADK events from run_live() → forward to WebSocket."""
-        async for event in runner.run_live(
-            user_id=user_id,
-            session_id=session_id,
-            live_request_queue=live_request_queue,
-            run_config=run_config,
-        ):
-            event_json = event.model_dump_json(exclude_none=True, by_alias=True)
-            logger.debug("[ADK Event] %s", event_json[:200])
-            await websocket.send_text(event_json)
-
-    # Run both tasks concurrently
-    try:
-        await asyncio.gather(upstream_task(), downstream_task())
     except WebSocketDisconnect:
         logger.info("Client disconnected: user=%s session=%s", user_id, session_id)
     except Exception as e:
-        logger.exception("Error in streaming session: %s", e)
+        logger.exception("Session error: %s", e)
     finally:
-        live_request_queue.close()
+        if live_queue:
+            live_queue.close()
+        if live_events_task and not live_events_task.done():
+            live_events_task.cancel()
         logger.info("Session closed: user=%s session=%s", user_id, session_id)
