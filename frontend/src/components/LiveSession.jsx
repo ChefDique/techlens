@@ -71,8 +71,7 @@ export default function LiveSession({ sessionData, onEnd }) {
     stopAudio()
     stopCamera()
     sendMessage({ type: 'end_session' })
-    // onEnd will be called when we receive session_outputs, or immediately with null
-    onEnd(null)
+    setTranscript((prev) => [...prev, { role: 'assistant', text: 'Generating session outputs...', id: Date.now() }])
   }
 
   const statusColor = {

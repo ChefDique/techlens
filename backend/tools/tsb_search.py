@@ -56,7 +56,7 @@ _STUB_TSBS = [
         "warranty_covered": True,
     },
     {
-        "id": "TSB-A/C-08-21",
+        "id": "TSB-AC-08-21",
         "title": "AC Compressor Clutch Failure / Refrigerant Leak at Schrader Valve",
         "applies_to": {"makes": ["Subaru"], "models": ["Forester", "Outback", "Crosstrek"], "years": list(range(2018, 2025))},
         "keywords": ["ac", "air conditioning", "compressor", "clutch", "refrigerant", "r134a", "r1234yf", "leak", "schrader"],

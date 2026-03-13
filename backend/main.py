@@ -6,7 +6,6 @@ Provides:
   WS   /ws/session      — bidirectional WebSocket for Gemini Live sessions
 """
 
-import base64
 import json
 import logging
 import os
