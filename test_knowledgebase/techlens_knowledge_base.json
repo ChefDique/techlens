@@ -343,8 +343,7 @@
           "summary": "Subaru of America, Inc. (Subaru) is recalling certain 2023 Outback, Legacy, Ascent, and Impreza vehicles.  The center support bolts for the driveshaft may loosen, resulting in the disconnection of the front end of the driveshaft.",
           "consequence": "Separation of the front end of the driveshaft increases the risk of a crash.",
           "remedy": "Dealers will clean the bolt mounting surfaces of the center support brace and install new bolts, free of charge.  Owner notification letters were mailed November 20, 2023.  Owners may contact Subaru's customer service at 1-844-373-6614.  Subaru's number for this recall is WRN-23.",
-          "notes": "Owners may also contact the National Highway Traffic Safety Administration Vehicle Safety Hotline at 1-888-327-4236 (TTY 1-800-424-9153), or go to www.nhtsa.gov.",
-          "schema_version": "1.0"
+          "notes": "Owners may also contact the National Highway Traffic Safety Administration Vehicle Safety Hotline at 1-888-327-4236 (TTY 1-800-424-9153), or go to www.nhtsa.gov."
         },
         {
           "campaign_number": "23V755000",
@@ -353,8 +352,7 @@
           "summary": "Subaru of America, Inc. is recalling certain model year 2021 Crosstrek, 2022 Forester, 2021-2023 Legacy, and Outback vehicles.  An insufficient weld may allow water to enter the inhibitor switch, causing it to fail.",
           "consequence": "An inoperative inhibitor switch may prevent the reverse lights from illuminating and the rearview camera image from displaying, increasing the risk of a crash.",
           "remedy": "Dealers will replace the inhibitor switch, free of charge.  Owner notification letters were mailed January 8, 2024.  Owners may contact Subaru customer service at 1-800-782-2783.  Subaru's number for this recall is WRQ-23.",
-          "notes": "Owners may also contact the National Highway Traffic Safety Administration Vehicle Safety Hotline at 1-888-327-4236 (TTY 1-800-424-9153), or go to www.safercar.gov.",
-          "schema_version": "1.0"
+          "notes": "Owners may also contact the National Highway Traffic Safety Administration Vehicle Safety Hotline at 1-888-327-4236 (TTY 1-800-424-9153), or go to www.safercar.gov."
         }
       ],
       "known_issues_from_field": [
@@ -797,8 +795,7 @@
           "summary": "Subaru of America, Inc. (Subaru) is recalling certain 2024 Crosstrek, Impreza, 2023-2024 Forester, and 2023 WRX vehicles.  The front driveshaft assemblies' outer race may develop cracks and break.",
           "consequence": "A broken driveshaft can cause a loss of drive power while driving or vehicle rollaway when the vehicle is in park without the parking brake engaged.  Either of these scenarios can increase the risk of a crash.",
           "remedy": "Dealers will inspect and replace the left and right front driveshafts as necessary, free of charge.  Owner notification letters were mailed January 8, 2024.  Owners may contact Subaru's customer service at 1-844-373-6614.  Subaru's number for this recall is WRP-23.",
-          "notes": "Owners may also contact the National Highway Traffic Safety Administration Vehicle Safety Hotline at 1-888-327-4236 (TTY 1-800-424-9153), or go to www.nhtsa.gov.",
-          "schema_version": "1.0"
+          "notes": "Owners may also contact the National Highway Traffic Safety Administration Vehicle Safety Hotline at 1-888-327-4236 (TTY 1-800-424-9153), or go to www.nhtsa.gov."
         }
       ],
       "known_issues_from_field": [
@@ -1225,7 +1222,7 @@
     {
       "id": "tsb_02-157-22R",
       "number": "02-157-22R",
-      "type": "TSB",
+      "type": "tsb",
       "title": "CVT Judder / Hesitation at Low Speed",
       "affected_vehicles": [
         {
@@ -1305,7 +1302,7 @@
     {
       "id": "tsb_15-275-21",
       "number": "15-275-21",
-      "type": "TSB",
+      "type": "tsb",
       "title": "Thermostat / Thermal Control Valve Failure",
       "affected_vehicles": [
         {
@@ -1383,7 +1380,7 @@
     {
       "id": "tsb_11-200-22",
       "number": "11-200-22",
-      "type": "TSB",
+      "type": "tsb",
       "title": "STARLINK Infotainment System Freeze / Reboot",
       "affected_vehicles": [
         {
@@ -1461,7 +1458,7 @@
     {
       "id": "tsb_12-235-22",
       "number": "12-235-22",
-      "type": "TSB",
+      "type": "tsb",
       "title": "EyeSight Intermittent Disable / Unavailable",
       "affected_vehicles": [
         {
@@ -1540,7 +1537,7 @@
     {
       "id": "tsb_11-215-23",
       "number": "11-215-23",
-      "type": "TSB",
+      "type": "tsb",
       "title": "Battery Drain / Parasitic Draw from DCM",
       "affected_vehicles": [
         {
@@ -1610,7 +1607,7 @@
     {
       "id": "tsb_06-75-22",
       "number": "06-75-22",
-      "type": "TSB",
+      "type": "tsb",
       "title": "Oil Consumption Concern - FB25 Engine",
       "affected_vehicles": [
         {
@@ -1672,7 +1669,7 @@
     {
       "id": "tsb_16-141-21",
       "number": "16-141-21",
-      "type": "TSB",
+      "type": "tsb",
       "title": "CVT Judder / Shudder Under Light Throttle",
       "affected_vehicles": [
         {
@@ -1739,7 +1736,7 @@
     {
       "id": "tsb_02-157-14R",
       "number": "02-157-14R",
-      "type": "TSB",
+      "type": "tsb",
       "title": "Engine Oil Consumption — FB20 / FB25 Piston Ring Inspection",
       "affected_vehicles": [
         {
@@ -1796,7 +1793,7 @@
     {
       "id": "tsb_AC-08-21",
       "number": "AC-08-21",
-      "type": "TSB",
+      "type": "tsb",
       "title": "AC Compressor Clutch Failure / Refrigerant Leak at Schrader Valve",
       "affected_vehicles": [
         {
@@ -1870,7 +1867,7 @@
     {
       "id": "tsb_WHL-BRG-03",
       "number": "WHL-BRG-03",
-      "type": "TSB",
+      "type": "tsb",
       "title": "Rear Wheel Bearing Noise / Rumble at Highway Speed",
       "affected_vehicles": [
         {
@@ -1936,7 +1933,7 @@
     {
       "id": "tsb_STR-MOT-01",
       "number": "STR-MOT-01",
-      "type": "TSB",
+      "type": "tsb",
       "title": "No-Crank / Single-Click: Starter Motor Failure",
       "affected_vehicles": [
         {
@@ -1998,7 +1995,7 @@
     {
       "id": "tsb_BRK-SQK-02",
       "number": "BRK-SQK-02",
-      "type": "TSB",
+      "type": "tsb",
       "title": "Front Brake Squeal / Squeak on Light Application",
       "affected_vehicles": [
         {
@@ -2061,7 +2058,7 @@
     {
       "id": "tsb_INF-SW-22",
       "number": "INF-SW-22",
-      "type": "TSB",
+      "type": "tsb",
       "title": "StarLink Infotainment System Freeze / Black Screen",
       "affected_vehicles": [
         {
@@ -2120,7 +2117,7 @@
     {
       "id": "tsb_HG-OIL-SEEP-01",
       "number": "HG-OIL-SEEP-01",
-      "type": "TSB",
+      "type": "tsb",
       "title": "Head Gasket External Oil / Coolant Seepage — FB25 Pre-2021",
       "affected_vehicles": [
         {
@@ -2287,6 +2284,36 @@
       "summary": "Subaru of America, Inc. is recalling certain model year 2021 Crosstrek, 2022 Forester, 2021-2023 Legacy, and Outback vehicles. An insufficient weld may allow water to enter the inhibitor switch, causing it to fail.",
       "consequence": "An inoperative inhibitor switch may prevent the reverse lights from illuminating and the rearview camera image from displaying, increasing the risk of a crash.",
       "remedy": "Dealers will replace the inhibitor switch, free of charge.",
+      "cross_references": [],
+      "pdf_path": null,
+      "severity": "HIGH",
+      "source": "nhtsa_recall",
+      "ingested_at": "2026-03-14T00:00:00Z"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "recall_23V754000",
+      "type": "recall",
+      "categories": [
+        "POWER TRAIN"
+      ],
+      "campaign_number": "23V754000",
+      "title": "Front Driveshaft Outer Race May Crack and Break",
+      "report_date": "2023-09-11",
+      "affected_vehicles": [
+        {
+          "year_start": 2023,
+          "year_end": 2023,
+          "make": "Subaru",
+          "models": [
+            "Forester"
+          ]
+        }
+      ],
+      "component": "POWER TRAIN:DRIVELINE:DRIVESHAFT",
+      "summary": "Subaru of America, Inc. (Subaru) is recalling certain 2024 Crosstrek, Impreza, 2023-2024 Forester, and 2023 WRX vehicles.  The front driveshaft assemblies' outer race may develop cracks and break.",
+      "consequence": "A broken driveshaft can cause a loss of drive power while driving or vehicle rollaway when the vehicle is in park without the parking brake engaged.  Either of these scenarios can increase the risk of a crash.",
+      "remedy": "Dealers will inspect and replace the left and right front driveshafts as necessary, free of charge.  Owner notification letters were mailed January 8, 2024.  Owners may contact Subaru's customer service at 1-844-373-6614.  Subaru's number for this recall is WRP-23.",
       "cross_references": [],
       "pdf_path": null,
       "severity": "HIGH",
