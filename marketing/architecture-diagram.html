@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechLens Architecture</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0f172a;
+    color: #e2e8f0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px;
+  }
+  .diagram {
+    max-width: 1200px;
+    width: 100%;
+  }
+  .title {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .title h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -0.5px;
+  }
+  .title p {
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 8px;
+  }
+
+  /* Phase layout */
+  .phases {
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  .phase {
+    flex: 1;
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .phase-setup { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid #334155; }
+  .phase-active { background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%); border: 1px solid #065f46; }
+  .phase-review { background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); border: 1px solid #312e81; }
+
+  .phase-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    display: inline-block;
+    width: fit-content;
+  }
+  .phase-setup .phase-label { background: #334155; color: #94a3b8; }
+  .phase-active .phase-label { background: #065f46; color: #6ee7b7; }
+  .phase-review .phase-label { background: #312e81; color: #a5b4fc; }
+
+  .phase-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #f1f5f9;
+  }
+  .phase-desc {
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  /* Agent cards */
+  .agent-card {
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .agent-intake { background: #1e293b; border: 1px solid #475569; }
+  .agent-live { background: #022c22; border: 1px solid #059669; }
+  .agent-writer { background: #1e1b4b; border: 1px solid #4f46e5; }
+
+  .agent-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .agent-model {
+    font-size: 11px;
+    color: #64748b;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    margin-bottom: 10px;
+  }
+  .agent-detail {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+  .agent-detail li {
+    margin-bottom: 4px;
+    list-style: none;
+    padding-left: 16px;
+    position: relative;
+  }
+  .agent-detail li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #475569;
+  }
+
+  /* Data flow arrows between phases */
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    flex-shrink: 0;
+  }
+  .flow-arrow svg { opacity: 0.5; }
+
+  /* Component pills */
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin: 2px 4px 2px 0;
+    font-weight: 500;
+  }
+  .pill-green { background: #065f46; color: #6ee7b7; }
+  .pill-blue { background: #1e3a5f; color: #7dd3fc; }
+  .pill-purple { background: #312e81; color: #c4b5fd; }
+  .pill-gray { background: #334155; color: #94a3b8; }
+
+  /* Output docs */
+  .output-doc {
+    background: #1e1b4b;
+    border: 1px solid #3730a3;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  .output-doc-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #c4b5fd;
+  }
+  .output-doc-desc {
+    font-size: 11px;
+    color: #7c7caa;
+    margin-top: 2px;
+  }
+
+  /* Bottom bar: tech stack */
+  .stack-bar {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .stack-item {
+    font-size: 12px;
+    padding: 6px 16px;
+    border-radius: 8px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    font-weight: 500;
+  }
+
+  /* Input sources at top */
+  .inputs-row {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .input-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #cbd5e1;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 8px 16px;
+  }
+  .input-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+  .icon-form { background: #334155; }
+  .icon-mic { background: #065f46; }
+  .icon-cam { background: #7c3aed20; border: 1px solid #7c3aed; }
+
+  /* State model */
+  .state-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .state-badge {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+  .state-idle { background: #1e293b; color: #64748b; border: 1px solid #334155; }
+  .state-listen { background: #022c22; color: #34d399; border: 1px solid #059669; }
+  .state-look { background: #2e1065; color: #a78bfa; border: 1px solid #7c3aed; }
+
+  /* KB callout */
+  .kb-callout {
+    background: #1a1a2e;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: auto;
+  }
+  .kb-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    margin-bottom: 6px;
+  }
+  .kb-stat {
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.6;
+  }
+
+  /* Context package arrow */
+  .context-flow {
+    text-align: center;
+    padding: 8px 0;
+    font-size: 11px;
+    color: #475569;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="diagram">
+  <div class="title">
+    <h1>TechLens Architecture</h1>
+    <p>Three-Agent Pipeline &mdash; AI Diagnostic Copilot for Auto Repair Technicians</p>
+  </div>
+
+  <!-- Input sources -->
+  <div class="inputs-row">
+    <div class="input-badge">
+      <div class="input-icon icon-form">📋</div>
+      Vehicle + Concern Form
+    </div>
+    <div class="input-badge">
+      <div class="input-icon icon-mic">🎙</div>
+      Voice (16kHz PCM-16)
+    </div>
+    <div class="input-badge">
+      <div class="input-icon icon-cam">📷</div>
+      Camera (1 FPS JPEG)
+    </div>
+  </div>
+
+  <!-- Three phases -->
+  <div class="phases">
+
+    <!-- PHASE 1: SETUP -->
+    <div class="phase phase-setup">
+      <div class="phase-label">Phase 1</div>
+      <div class="phase-title">Setup &amp; Intake</div>
+      <div class="phase-desc">Pre-session context generation. Runs once before the live session starts.</div>
+
+      <div class="agent-card agent-intake">
+        <div class="agent-name">Intake Agent</div>
+        <div class="agent-model">gemini-2.5-flash</div>
+        <ul class="agent-detail">
+          <li>Queries vehicle-specific KB</li>
+          <li>Filters TSBs by symptoms</li>
+          <li>Pulls NHTSA complaint patterns</li>
+          <li>Synthesizes diagnostic flow</li>
+        </ul>
+      </div>
+
+      <div class="context-flow">↓ ~2KB context package ↓</div>
+
+      <div class="kb-callout">
+        <div class="kb-title">Knowledge Base (70KB JSON)</div>
+        <div class="kb-stat">
+          3 Subaru models &bull; 8 TSBs<br>
+          175 NHTSA complaints &bull; 14 known issues
+        </div>
+      </div>
+    </div>
+
+    <!-- Arrow -->
+    <div class="flow-arrow">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M8 16H24M24 16L18 10M24 16L18 22" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- PHASE 2: ACTIVE -->
+    <div class="phase phase-active">
+      <div class="phase-label">Phase 2</div>
+      <div class="phase-title">Live Session</div>
+      <div class="phase-desc">Real-time bidirectional voice + camera. Dynamic system instruction injection from Intake.</div>
+
+      <div class="agent-card agent-live">
+        <div class="agent-name">Live Agent</div>
+        <div class="agent-model">gemini-2.5-flash-native-audio (via ADK)</div>
+        <ul class="agent-detail">
+          <li>Bidi-streaming audio conversation</li>
+          <li>Real-time camera vision</li>
+          <li>Context-aware TSB guidance</li>
+          <li>Natural interruption handling</li>
+        </ul>
+        <div style="margin-top: 10px">
+          <span class="pill pill-green">search_knowledge_base()</span>
+          <span class="pill pill-green">log_finding()</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 8px">
+        <div class="kb-title">Session States</div>
+        <div class="state-row">
+          <span class="state-badge state-idle">Idle</span>
+          <span class="state-badge state-listen">Listening</span>
+          <span class="state-badge state-look">Looking</span>
+        </div>
+      </div>
+
+      <div class="kb-callout" style="margin-top: 16px">
+        <div class="kb-title">WebSocket Orchestrator</div>
+        <div class="kb-stat">
+          FastAPI state machine &bull; ADK LiveRequestQueue<br>
+          Auto-reconnect &bull; 15-min audio cap &bull; 15s video cap
+        </div>
+      </div>
+    </div>
+
+    <!-- Arrow -->
+    <div class="flow-arrow">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M8 16H24M24 16L18 10M24 16L18 22" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- PHASE 3: REVIEW -->
+    <div class="phase phase-review">
+      <div class="phase-label">Phase 3</div>
+      <div class="phase-title">Documentation</div>
+      <div class="phase-desc">Post-session generation. One conversation, three audiences, zero typing.</div>
+
+      <div class="agent-card agent-writer">
+        <div class="agent-name">Writer Agent</div>
+        <div class="agent-model">gemini-2.5-flash</div>
+        <ul class="agent-detail">
+          <li>Full transcript + findings input</li>
+          <li>Three-audience document gen</li>
+          <li>Fallback templates on failure</li>
+        </ul>
+      </div>
+
+      <div class="output-doc">
+        <div class="output-doc-title">Tech Notes</div>
+        <div class="output-doc-desc">OEM-formatted for repair order filing</div>
+      </div>
+      <div class="output-doc">
+        <div class="output-doc-title">Customer Summary</div>
+        <div class="output-doc-desc">Plain English, no jargon, cost context</div>
+      </div>
+      <div class="output-doc">
+        <div class="output-doc-title">Escalation Brief</div>
+        <div class="output-doc-desc">Structured handoff to manufacturer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech stack bar -->
+  <div class="stack-bar">
+    <div class="stack-item">Python 3.13</div>
+    <div class="stack-item">FastAPI</div>
+    <div class="stack-item">Google ADK</div>
+    <div class="stack-item">Gemini Live API</div>
+    <div class="stack-item">React 19</div>
+    <div class="stack-item">Vite</div>
+    <div class="stack-item">Cloud Run</div>
+    <div class="stack-item">Firestore</div>
+  </div>
+</div>
+</body>
+</html>
