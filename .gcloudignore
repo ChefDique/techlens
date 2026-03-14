@@ -1,0 +1,18 @@
+# Large directories not needed for Docker build
+.venv/
+node_modules/
+dist/
+__pycache__/
+.git/
+.worktrees/
+.superpowers/
+
+# Frontend (served separately, not in backend container)
+frontend/
+
+# Dev files
+.DS_Store
+*.pyc
+.env
+research-docs/
+docs/

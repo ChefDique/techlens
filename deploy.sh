@@ -4,8 +4,8 @@
 # Usage: ./deploy.sh [--project PROJECT_ID] [--region REGION]
 #
 # Example:
-#   ./deploy.sh --project my-gcp-project --region us-central1
-#   ./deploy.sh  # Uses default region (us-central1) - requires GCLOUD_PROJECT env var
+#   ./deploy.sh --project techlens-490020 --region us-central1
+#   ./deploy.sh  # Uses default gcloud project
 
 set -e
 
@@ -46,20 +46,18 @@ fi
 
 echo "Deploying TechLens Backend"
 echo "=========================="
-echo "Project ID: $PROJECT_ID"
-echo "Region: $REGION"
-echo "Service: $SERVICE_NAME"
-echo "Image: gcr.io/$PROJECT_ID/$IMAGE_NAME"
+echo "Project:  $PROJECT_ID"
+echo "Region:   $REGION"
+echo "Service:  $SERVICE_NAME"
+echo "Image:    gcr.io/$PROJECT_ID/$IMAGE_NAME"
 echo ""
 
-# Build Docker image using Cloud Build
-echo "Building Docker image..."
-gcloud builds submit --tag "gcr.io/$PROJECT_ID/$IMAGE_NAME" backend/ --project "$PROJECT_ID"
-
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to build Docker image"
-  exit 1
-fi
+# Build from project root (Dockerfile needs backend/ + test_knowledgebase/)
+echo "Building Docker image via Cloud Build..."
+gcloud builds submit \
+  --config cloudbuild.yaml \
+  --project "$PROJECT_ID" \
+  .
 
 echo ""
 echo "Deploying to Cloud Run..."
@@ -69,15 +67,15 @@ gcloud run deploy "$SERVICE_NAME" \
   --region "$REGION" \
   --allow-unauthenticated \
   --port 8080 \
+  --memory 512Mi \
+  --timeout 300 \
+  --set-env-vars "GOOGLE_API_KEY=$(grep GOOGLE_API_KEY backend/.env | cut -d= -f2)" \
   --project "$PROJECT_ID"
 
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to deploy to Cloud Run"
-  exit 1
-fi
-
 echo ""
+SERVICE_URL=$(gcloud run services describe "$SERVICE_NAME" --region "$REGION" --project "$PROJECT_ID" --format 'value(status.url)' 2>/dev/null)
 echo "Deployment successful!"
-echo "Service URL: https://$SERVICE_NAME-$(echo $REGION | tr '_' '-')-$PROJECT_ID.a.run.app"
+echo "Service URL: $SERVICE_URL"
 echo ""
-echo "Tip: To view logs: gcloud run logs read $SERVICE_NAME --region $REGION --project $PROJECT_ID"
+echo "Verify: curl $SERVICE_URL/health"
+echo "Logs:   gcloud run logs read $SERVICE_NAME --region $REGION --project $PROJECT_ID"
