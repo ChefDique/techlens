@@ -106,6 +106,7 @@ export default function LiveSession({ sessionData, onEnd }) {
   const [intakeStatus, setIntakeStatus] = useState('pending') // 'pending' | 'loading' | 'ready'
   const [intakeContext, setIntakeContext] = useState(null)
   const [cameraCountdown, setCameraCountdown] = useState(null)
+  const [isThinking, setIsThinking] = useState(false)
   const cameraTimerRef = useRef(null)
   const countdownIntervalRef = useRef(null)
   const transcriptEndRef = useRef(null)
@@ -165,13 +166,24 @@ export default function LiveSession({ sessionData, onEnd }) {
       onEnd(lastEvent.outputs)
       return
     }
+    if (lastEvent.type === 'error') {
+      setTranscript((prev) => [...prev, {
+        role: 'assistant',
+        text: `Connection issue: ${lastEvent.message || 'Unknown error'}. You can try ending the session.`,
+        id: Date.now(),
+      }])
+      return
+    }
 
     const parsed = parseAdkEvent(lastEvent)
     for (const item of parsed) {
       if (item.type === 'transcript') {
         // Accumulate transcription text until turn completes
         pendingRef.current[item.role] += item.text
+        if (item.role === 'user') setIsThinking(true)
+        if (item.role === 'assistant') setIsThinking(false)
       } else if (item.type === 'turn_complete') {
+        setIsThinking(false)
         // Flush accumulated transcription as complete messages
         for (const role of ['user', 'assistant']) {
           const text = pendingRef.current[role].trim()
@@ -185,18 +197,25 @@ export default function LiveSession({ sessionData, onEnd }) {
           pendingRef.current[role] = ''
         }
       } else if (item.type === 'tool_call') {
+        const label = item.name === 'search_knowledge_base' ? 'Searching KB...'
+          : item.name === 'log_finding' ? 'Logging finding...'
+          : `Running ${item.name}...`
         setTranscript((prev) => [...prev, {
           role: 'tool',
-          text: `[Calling: ${item.name}]`,
+          toolType: 'call',
+          toolName: item.name,
+          text: label,
           id: Date.now() + Math.random(),
         }])
       } else if (item.type === 'tool_result') {
-        const summary = typeof item.result === 'string'
-          ? item.result.slice(0, 200)
-          : JSON.stringify(item.result).slice(0, 200)
+        const label = item.name === 'log_finding' ? 'Finding logged'
+          : item.name === 'search_knowledge_base' ? 'KB results loaded'
+          : `${item.name} complete`
         setTranscript((prev) => [...prev, {
           role: 'tool',
-          text: `[${item.name}] ${summary}`,
+          toolType: 'result',
+          toolName: item.name,
+          text: label,
           id: Date.now() + Math.random(),
         }])
       } else if (item.type === 'audio' && isSpeakerActive) {
@@ -275,7 +294,7 @@ export default function LiveSession({ sessionData, onEnd }) {
       setCameraCountdown(15)
       countdownIntervalRef.current = setInterval(() => {
         setCameraCountdown((prev) => {
-          if (prev <= 1) {
+          if (prev <= 0) {
             clearInterval(countdownIntervalRef.current)
             countdownIntervalRef.current = null
             return null
@@ -313,11 +332,16 @@ export default function LiveSession({ sessionData, onEnd }) {
   return (
     <div className="h-full flex flex-col lg:flex-row gap-0 overflow-hidden relative">
       {intakeStatus !== 'ready' && (
-        <div className="absolute inset-0 bg-gray-900/90 z-10 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4" />
-            <p className="text-lg text-white">Analyzing vehicle data...</p>
-            <p className="text-sm text-gray-400 mt-1">Preparing diagnostic context</p>
+        <div className="absolute inset-0 bg-gray-900/95 z-10 flex items-center justify-center">
+          <div className="text-center max-w-sm">
+            <div className="relative w-16 h-16 mx-auto mb-6">
+              <div className="absolute inset-0 rounded-full border-4 border-gray-700" />
+              <div className="absolute inset-0 rounded-full border-4 border-blue-500 border-t-transparent animate-spin" />
+            </div>
+            <p className="text-xl font-semibold text-white mb-2">Preparing Session</p>
+            <p className="text-sm text-gray-400 leading-relaxed">
+              {intakeStatus === 'pending' ? 'Connecting to TechLens...' : 'Analyzing vehicle history, matching TSBs, and building diagnostic context...'}
+            </p>
           </div>
         </div>
       )}
@@ -360,9 +384,15 @@ export default function LiveSession({ sessionData, onEnd }) {
         </div>
 
         {intakeContext && !intakeContext.error && (
-          <div className="bg-gray-800 rounded-xl px-5 py-3 border border-gray-700 text-sm text-gray-300">
-            <div className="font-medium text-white mb-1">Session Ready</div>
-            <div>{intakeContext.tsb_count} TSBs loaded, {intakeContext.issue_count} known issues</div>
+          <div className="bg-gray-800 rounded-xl px-5 py-3 border border-gray-700 text-sm text-gray-300 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-white">Context Loaded</span>
+              <span className="text-xs text-green-400 font-medium">Ready</span>
+            </div>
+            <div className="flex gap-3 text-xs">
+              <span className="bg-gray-700 px-2 py-1 rounded">{intakeContext.tsb_count} TSBs</span>
+              <span className="bg-gray-700 px-2 py-1 rounded">{intakeContext.issue_count} Issues</span>
+            </div>
           </div>
         )}
 
@@ -384,34 +414,53 @@ export default function LiveSession({ sessionData, onEnd }) {
 
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {transcript.length === 0 && (
-            <div className="text-center text-gray-600 mt-16">
-              <p className="text-lg">Session started</p>
-              <p className="text-sm mt-1">Enable mic to begin conversation</p>
+            <div className="text-center text-gray-600 mt-16 space-y-4">
+              <div className="text-4xl">🔧</div>
+              <p className="text-lg text-gray-400">Ready to diagnose</p>
+              <div className="text-sm space-y-1 text-gray-600">
+                <p>Tap the mic to start talking</p>
+                <p>Tap the camera to show a component</p>
+              </div>
             </div>
           )}
           {transcript.map((entry) => (
             <div
               key={entry.id}
-              className={`flex ${entry.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${entry.role === 'user' ? 'justify-end' : entry.role === 'tool' ? 'justify-center' : 'justify-start'}`}
             >
+              {entry.role === 'tool' ? (
+                <div className="flex items-center gap-2 text-xs text-gray-500 py-1">
+                  <span className={`w-1.5 h-1.5 rounded-full ${entry.toolType === 'call' ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
+                  <span>{entry.text}</span>
+                </div>
+              ) : (
               <div
                 className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                   entry.role === 'user'
                     ? 'bg-blue-600 text-white rounded-br-sm'
-                    : entry.role === 'tool'
-                    ? 'bg-gray-700 text-gray-300 font-mono text-xs rounded-bl-sm border border-gray-600'
                     : 'bg-gray-800 text-gray-100 rounded-bl-sm'
                 }`}
               >
                 {entry.role !== 'user' && (
-                  <div className="text-xs text-gray-500 mb-1 font-medium uppercase tracking-wide">
-                    {entry.role === 'tool' ? 'Tool' : 'TechLens'}
-                  </div>
+                  <div className="text-xs text-gray-500 mb-1 font-medium uppercase tracking-wide">TechLens</div>
                 )}
                 {entry.text}
               </div>
+              )}
             </div>
           ))}
+          {isThinking && (
+            <div className="flex justify-start">
+              <div className="bg-gray-800 rounded-2xl px-4 py-3 rounded-bl-sm">
+                <div className="text-xs text-gray-500 mb-1 font-medium uppercase tracking-wide">TechLens</div>
+                <div className="flex gap-1">
+                  <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                </div>
+              </div>
+            </div>
+          )}
           <div ref={transcriptEndRef} />
         </div>
       </div>

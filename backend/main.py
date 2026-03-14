@@ -74,46 +74,56 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
 
     async def run_live_downstream(runner: Runner, ws: WebSocket):
         """Receive ADK events from run_live() and forward to WebSocket + transcript."""
-        async for event in runner.run_live(
-            user_id=user_id,
-            session_id=session_id,
-            live_request_queue=live_queue,
-            run_config=RunConfig(
-                streaming_mode=StreamingMode.BIDI,
-                response_modalities=["AUDIO"],
-                input_audio_transcription=types.AudioTranscriptionConfig(),
-                output_audio_transcription=types.AudioTranscriptionConfig(),
-            ),
-        ):
-            # Forward full event to frontend
-            event_json = event.model_dump_json(exclude_none=True, by_alias=True)
-            await ws.send_text(event_json)
+        try:
+            async for event in runner.run_live(
+                user_id=user_id,
+                session_id=session_id,
+                live_request_queue=live_queue,
+                run_config=RunConfig(
+                    streaming_mode=StreamingMode.BIDI,
+                    response_modalities=["AUDIO"],
+                    input_audio_transcription=types.AudioTranscriptionConfig(),
+                    output_audio_transcription=types.AudioTranscriptionConfig(),
+                ),
+            ):
+                # Forward full event to frontend
+                event_json = event.model_dump_json(exclude_none=True, by_alias=True)
+                await ws.send_text(event_json)
 
-            # Accumulate transcriptions for the Writer agent
-            input_t = getattr(event, "input_transcription", None)
-            if input_t:
-                text = input_t.text if hasattr(input_t, "text") else str(input_t)
-                if text and not getattr(input_t, "partial", False):
-                    transcript.add("user", text)
+                # Accumulate transcriptions for the Writer agent
+                input_t = getattr(event, "input_transcription", None)
+                if input_t:
+                    text = input_t.text if hasattr(input_t, "text") else str(input_t)
+                    if text and not getattr(input_t, "partial", False):
+                        transcript.add("user", text)
 
-            output_t = getattr(event, "output_transcription", None)
-            if output_t:
-                text = output_t.text if hasattr(output_t, "text") else str(output_t)
-                if text and not getattr(output_t, "partial", False):
-                    transcript.add("assistant", text)
+                output_t = getattr(event, "output_transcription", None)
+                if output_t:
+                    text = output_t.text if hasattr(output_t, "text") else str(output_t)
+                    if text and not getattr(output_t, "partial", False):
+                        transcript.add("assistant", text)
 
-            # Capture logged findings from tool calls
-            if event.content and event.content.parts:
-                for part in event.content.parts:
-                    fn_resp = getattr(part, "function_response", None)
-                    if fn_resp and fn_resp.name == "log_finding":
-                        resp_data = fn_resp.response if isinstance(fn_resp.response, dict) else {}
-                        if resp_data.get("status") == "logged":
-                            transcript.add_finding(
-                                description=resp_data.get("description", ""),
-                                component=resp_data.get("component", ""),
-                                severity=resp_data.get("severity", "medium"),
-                            )
+                # Capture logged findings from tool calls
+                if event.content and event.content.parts:
+                    for part in event.content.parts:
+                        fn_resp = getattr(part, "function_response", None)
+                        if fn_resp and fn_resp.name == "log_finding":
+                            resp_data = fn_resp.response if isinstance(fn_resp.response, dict) else {}
+                            if resp_data.get("status") == "logged":
+                                transcript.add_finding(
+                                    description=resp_data.get("description", ""),
+                                    component=resp_data.get("component", ""),
+                                    severity=resp_data.get("severity", "medium"),
+                                )
+        except Exception as e:
+            logger.error("Live agent stream error: %s", e)
+            try:
+                await ws.send_text(json.dumps({
+                    "type": "error",
+                    "message": f"Live agent connection lost: {e}",
+                }))
+            except Exception:
+                pass
 
     try:
         while True:

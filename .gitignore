@@ -1,15 +1,23 @@
-.worktrees
-node_modules
-__pycache__
+# Environment
 .env
-*.pyc
-.venv
+
+# Virtual environments
+.venv/
+.worktrees/
+
+# Dependencies
+node_modules/
+
+# Build artifacts
 dist/
-backend/.DS_Store
-.DS_Store
+
+# Python cache
 __pycache__/
-.env
-.worktrees
-.worktrees
-frontend/node_modules
-frontend/dist
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# IDE & tools
+.superpowers/

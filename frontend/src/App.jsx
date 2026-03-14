@@ -47,16 +47,27 @@ export default function App() {
           <span className="text-xl font-semibold tracking-wide">TechLens</span>
           <span className="text-gray-500 text-sm hidden sm:inline">AI Diagnostic Assistant</span>
         </div>
-        {sessionData.roNumber && (
-          <div className="text-sm text-gray-400">
-            RO: <span className="text-white font-mono">{sessionData.roNumber}</span>
-          </div>
-        )}
-        {sessionData.vehicle && (
-          <div className="text-sm text-gray-400 hidden md:block">
-            {sessionData.vehicle.year} {sessionData.vehicle.make} {sessionData.vehicle.model}
-          </div>
-        )}
+        <div className="flex items-center gap-4">
+          {sessionData.vehicle && (
+            <div className="text-sm text-gray-400 hidden md:block">
+              {sessionData.vehicle.year} {sessionData.vehicle.make} {sessionData.vehicle.model}
+            </div>
+          )}
+          {sessionData.roNumber && (
+            <div className="text-sm text-gray-400">
+              RO: <span className="text-white font-mono">{sessionData.roNumber}</span>
+            </div>
+          )}
+          {phase === 'active' && (
+            <div className="flex items-center gap-1.5 text-xs font-medium text-green-400">
+              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              LIVE
+            </div>
+          )}
+          {phase === 'review' && (
+            <div className="text-xs font-medium text-blue-400">REVIEW</div>
+          )}
+        </div>
       </header>
 
       {/* Main content */}

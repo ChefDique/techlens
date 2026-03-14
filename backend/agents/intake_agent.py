@@ -78,7 +78,13 @@ Return ONLY valid JSON. No markdown fences."""
             model=INTAKE_MODEL,
             contents=prompt,
         )
-        analysis = json.loads(response.text)
+        raw = response.text.strip()
+        # Strip markdown fences if present
+        if raw.startswith("```"):
+            raw = raw.split("\n", 1)[1] if "\n" in raw else raw[3:]
+            if raw.endswith("```"):
+                raw = raw[:-3].strip()
+        analysis = json.loads(raw)
     except Exception as e:
         logger.error("Intake Gemini call failed: %s", e)
         analysis = {

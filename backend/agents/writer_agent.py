@@ -83,7 +83,12 @@ async def run_writer(transcript_text: str, intake_context: dict, findings: list[
             model=WRITER_MODEL,
             contents=prompt,
         )
-        outputs = json.loads(response.text)
+        raw = response.text.strip()
+        if raw.startswith("```"):
+            raw = raw.split("\n", 1)[1] if "\n" in raw else raw[3:]
+            if raw.endswith("```"):
+                raw = raw[:-3].strip()
+        outputs = json.loads(raw)
     except Exception as e:
         logger.error("Writer Gemini call failed: %s — generating fallback", e)
         outputs = _fallback_outputs(vehicle_str, intake_context, transcript_text, findings)

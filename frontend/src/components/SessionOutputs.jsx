@@ -8,12 +8,27 @@ const TABS = [
 
 export default function SessionOutputs({ outputs, onNewSession }) {
   const [activeTab, setActiveTab] = useState('tech_notes')
+  const [copied, setCopied] = useState(false)
 
   const content = outputs?.[activeTab] ?? null
 
-  function handleExport() {
-    // Stub: future export implementation
-    alert('Export coming soon')
+  async function handleCopy() {
+    if (!content) return
+    try {
+      await navigator.clipboard.writeText(content)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea')
+      textarea.value = content
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
   }
 
   return (
@@ -24,7 +39,7 @@ export default function SessionOutputs({ outputs, onNewSession }) {
           {TABS.map((tab) => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => { setActiveTab(tab.key); setCopied(false) }}
               className={`px-5 py-2.5 rounded-t-lg text-sm font-medium transition-colors cursor-pointer ${
                 activeTab === tab.key
                   ? 'bg-gray-800 text-white border border-b-0 border-gray-700'
@@ -38,16 +53,17 @@ export default function SessionOutputs({ outputs, onNewSession }) {
 
         <div className="flex gap-2 pb-1">
           <button
-            onClick={handleExport}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 text-sm rounded-lg transition-colors cursor-pointer"
+            onClick={handleCopy}
+            disabled={!content}
+            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 disabled:opacity-40 disabled:cursor-not-allowed text-gray-200 text-sm rounded-lg transition-colors cursor-pointer min-w-[90px]"
           >
-            Export
+            {copied ? 'Copied!' : 'Copy'}
           </button>
           <button
             onClick={onNewSession}
             className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
           >
-            Start New Session
+            New Session
           </button>
         </div>
       </div>

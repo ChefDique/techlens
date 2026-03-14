@@ -1,0 +1,1162 @@
+{
+  "vehicles": [
+    {
+      "id": "subaru_outback_2023",
+      "year": 2023,
+      "make": "Subaru",
+      "model": "Outback",
+      "trims": [
+        "Base",
+        "Premium",
+        "Limited",
+        "Touring",
+        "Wilderness",
+        "Onyx Edition XT",
+        "Limited XT",
+        "Touring XT"
+      ],
+      "engines": [
+        {
+          "code": "FB25",
+          "displacement": "2.5L",
+          "type": "DOHC Boxer 4-cylinder",
+          "hp": 182,
+          "torque": 176,
+          "fuel": "Regular"
+        },
+        {
+          "code": "FA24F",
+          "displacement": "2.4L",
+          "type": "Turbocharged DOHC Boxer 4-cylinder",
+          "hp": 260,
+          "torque": 277,
+          "fuel": "Premium recommended",
+          "note": "XT trims only"
+        }
+      ],
+      "transmission": {
+        "type": "Lineartronic CVT",
+        "note": "Continuously Variable Transmission with manual mode and paddle shifters"
+      },
+      "drivetrain": "Symmetrical All-Wheel Drive",
+      "safety_systems": [
+        "EyeSight Driver Assist (dual camera)",
+        "Pre-Collision Braking",
+        "Adaptive Cruise Control",
+        "Lane Departure Warning",
+        "Lane Keep Assist",
+        "Reverse Automatic Braking (RAB)",
+        "Blind-Spot Detection",
+        "Rear Cross-Traffic Alert"
+      ],
+      "nhtsa_complaints": {
+        "total_complaints": 83,
+        "top_issues": [
+          {
+            "category": "VISIBILITY/WIPER",
+            "count": 15,
+            "examples": [
+              {
+                "odi_number": 11659031,
+                "date": "03/13/2025",
+                "summary": "Windshield was struck by a small stone. There was no immediate damage but over a period of several weeks 5 cracks appeared traversing the windshield top to bottom.",
+                "components": "VISIBILITY/WIPER"
+              },
+              {
+                "odi_number": 11648201,
+                "date": "03/12/2025",
+                "summary": "I have had several times where tiny road pebbles have kicked up hitting the windshield and have caused cracks. There is now also a crack forming where there has not been any impact. This is my second windshield replacement in two years. I have never had a windshield that has been as fragile as this one. It seems to be a manufacturing issue with the windshield. Based on research online, appears this is a known issue.",
+                "components": "VISIBILITY/WIPER"
+              },
+              {
+                "odi_number": 11614171,
+                "date": "04/21/2024",
+                "summary": "Windshield developed a small crack when struck by a tiny piece of road debris. It appears unrepairable.  This requires a windshield replacement and recalibration of the eyesight technology. Seemed to easily be damaged beyond repair.",
+                "components": "VISIBILITY/WIPER"
+              }
+            ]
+          },
+          {
+            "category": "UNKNOWN OR OTHER",
+            "count": 11,
+            "examples": [
+              {
+                "odi_number": 11700696,
+                "date": "09/05/2025",
+                "summary": "I have had no working SOS safety button in case of a crash despite having a 3 year plan.  This started after a Starlink update failed to load to this date. I took it to the dealer and my software was found to be up to date and I was told not a Subaru problem for months.  I wrote to Subura America and told not to take the car in as no fix but any day but never came.  I am to renew the Safety and Security on 12-12-2025 but I do not want to pay for an SOS safety alert that does not work. My Subaru ",
+                "components": "UNKNOWN OR OTHER"
+              },
+              {
+                "odi_number": 11571827,
+                "date": "02/13/2024",
+                "summary": "It was 5:30 PM and I was driving 80mph (the speed limit) down interstate 84 near Mountain Home Idaho.  There was no one near me and I heard a very loud bang and my sunroof had exploded.  It exploded out as from the inside and not down as though something had hit it.  I did not see anything that could have caused this is just exploded on its own.",
+                "components": "UNKNOWN OR OTHER"
+              },
+              {
+                "odi_number": 11564658,
+                "date": "01/02/2024",
+                "summary": "The windshield immediately cracked from a small pebble. I\u2019ve had bigger rocks hit glass in other vehicles and only left a chip. This impacted the upper passenger side corner of the windshield close to the edge, the windshield spider webbed immediately, I\u2019ve never seen anything like it.",
+                "components": "UNKNOWN OR OTHER"
+              }
+            ]
+          },
+          {
+            "category": "FORWARD COLLISION AVOIDANCE",
+            "count": 10,
+            "examples": [
+              {
+                "odi_number": 11651579,
+                "date": "10/28/2024",
+                "summary": "When going down my driveway, the (RAB) Reverse Automatic Braking system will often times turn itself off and not reset like the manual say's it should.  I have to stop the car, shut it off and open the door to ensure everything is off and restart the car to get it to reset. It has been in the dealership, Subaru of Kennesaw, Kennesaw Ga 4 time for this issue.   Last time it was in the dealership they had it for over a month.   And it is still happening.   This started after a software update done",
+                "components": "FORWARD COLLISION AVOIDANCE"
+              },
+              {
+                "odi_number": 11602697,
+                "date": "11/02/2023",
+                "summary": "In the last approximately 8 months my car has deployed the forward collision warning--Slamming on the brakes-red lights flashing on the screen-seat belts locking--for no apparent reason.  Nothing was in front of me!!  Twice I was in a local construction zone with cars right behind me and was nearly rear-ended!!  Very Frightening experience each time! I took it to the Subaru dealer but they found nothing wrong with the eye sight technology. They did a test drive and it did not do that for them.. ",
+                "components": "FORWARD COLLISION AVOIDANCE"
+              },
+              {
+                "odi_number": 11549650,
+                "date": "10/02/2023",
+                "summary": "Traveling on I-75 SB just outside Atlanta, was in lane 2 of about 7 lanes. One car in lane 1, bumper was near my driver door, another truck in lane 4 or 5 approx 200' in front of us. We were in the front of a pack of vehicles. I had the cruise control set about 70, weather was clear, about 3 in the afternoon. With nothing in front of us and no warning, the car began flashing the red dash lights, the cluster flashed the red warning about braking, and the brakes were automatically applied with eno",
+                "components": "FORWARD COLLISION AVOIDANCE"
+              }
+            ]
+          },
+          {
+            "category": "ELECTRICAL SYSTEM",
+            "count": 9,
+            "examples": [
+              {
+                "odi_number": 11702638,
+                "date": "12/02/2025",
+                "summary": "Recently, in my 2023 Subaru Outback, I have been having pop-up ads for SirusXM take over my infotainment screen.  The ad appears in the center, does not allow the user to interact with the screen - including air conditioning control and traction control selection - and will not go away until I acknowledge the ad.  It has appeared when I start the vehicle and while I am driving.  I contacted Subaru of America; they first told me to contact SiriusXM.  I asked why I was being told to contact Sirius",
+                "components": "ELECTRICAL SYSTEM"
+              },
+              {
+                "odi_number": 11695441,
+                "date": "10/13/2025",
+                "summary": "The contact owns a 2023 Subaru Outlook. The contact stated that while the vehicle was parked, the Starlink system failed to function as intended. The vehicle was taken to the dealer; however, the failure was not duplicated. The vehicle was not diagnosed or repaired by an independent mechanic or dealer. The contact was informed that it was a known failure; however, there was no fix available. In addition, the contact was informed that there were more than 44,000 consumers experiencing the failure",
+                "components": "ELECTRICAL SYSTEM"
+              },
+              {
+                "odi_number": 11675441,
+                "date": "07/10/2025",
+                "summary": "My 2023 Subaru Outback Wilderness experienced multiple complete failures to start over a 2-day period at 51,930 miles, creating significant safety risks and stranding situations.Component Failure: Battery system (SOA821B700, 620 CCA) failed to maintain charge when vehicle parked/off. Component replaced and available for inspection if retrieved from disposal. What Happened: Vehicle experienced repeated failure-to-start episodes over 2 consecutive days at 51,930 miles. While jump-startable, batter",
+                "components": "ELECTRICAL SYSTEM"
+              }
+            ]
+          },
+          {
+            "category": "EXTERIOR LIGHTING",
+            "count": 6,
+            "examples": [
+              {
+                "odi_number": 11544522,
+                "date": "04/01/2023",
+                "summary": "The contact owns a 2023 Subaru Outback. The contact stated that the headlights were very dim while driving at night. Additionally, the contact stated that a black square shadow would appear in the illumination of both headlights which also impaired her vision while driving at night. The vehicle was taken to the dealer who found no defect with the vehicle. The contact was then referred to the manufacturer for further assistance. The manufacturer was notified of the failure and a complaint was fil",
+                "components": "EXTERIOR LIGHTING"
+              },
+              {
+                "odi_number": 11541215,
+                "date": "08/28/2023",
+                "summary": "I purchased this Outback and did not test drive at night (assuming I'd never have issues with headlight functionality). Upon driving at night, however, there are safety issues with the low beams. As others have mentioned, there are two shadow artifacts near the top of the field of vision that move from side to side. They are distracting (almost looks like an animal darting across the road) and dangerous.  Secondly, the cutoff line with the projector headlights on low-beams severely limits field ",
+                "components": "EXTERIOR LIGHTING"
+              },
+              {
+                "odi_number": 11528067,
+                "date": "06/18/2023",
+                "summary": "I'm a first time Subaru owner but am now challenging my decision to buy a Subaru.  While driving at night on dark roads in Pennsylvania, it was quite obvious and strange that the top half of the windshield was black while the bottom half was clear showing the lights on the road.   This was quite annoying and disruptive while driving;   We did not notice such on a well-lit road.   I googled and found out that many Subaru owners experienced the same issue.   I've been driving for over 55 years and",
+                "components": "EXTERIOR LIGHTING"
+              }
+            ]
+          },
+          {
+            "category": "LATCHES/LOCKS/LINKAGES",
+            "count": 3,
+            "examples": [
+              {
+                "odi_number": 11700576,
+                "date": "10/01/2025",
+                "summary": "The contact owns a 2023 Subaru Outback. The contact stated that while walking around the vehicle attempting to put her husband in the passenger seat, the hatchback opened independently, and they both got pushed independently from the vehicle on the ground from the impact. The contact mentioned by the standers came out of the office to check on them and called 911 immediately. The contact stated that she sustained injuries to the knee and left shoulder, and her husband sustained injuries from the",
+                "components": "LATCHES/LOCKS/LINKAGES"
+              },
+              {
+                "odi_number": 11581272,
+                "date": "03/29/2024",
+                "summary": "While traveling at highway speeds (75 mph) the hood release mechanism released causing the hood to lift several inches. While the manual release kept the hood from opening completely, I had to immediately pull to the shoulder and firmly close the hood.",
+                "components": "LATCHES/LOCKS/LINKAGES"
+              },
+              {
+                "odi_number": 11509554,
+                "date": "02/11/2023",
+                "summary": "The contact owns a 2023 Subaru Outback. The contact stated while driving at an undisclosed speed, the liftgate would independently open without assistance. The vehicle was not diagnosed or repaired by an independent mechanic or dealer. The manufacturer was not made aware of the failure. The failure mileage was approximately 1,700.",
+                "components": "LATCHES/LOCKS/LINKAGES"
+              }
+            ]
+          },
+          {
+            "category": "ELECTRICAL SYSTEM,FORWARD COLLISION AVOIDANCE",
+            "count": 3,
+            "examples": [
+              {
+                "odi_number": 11587316,
+                "date": "05/06/2024",
+                "summary": "The Eyesight system on my 2023 Subaru Outback will suddenly stop working.  It will go out in all conditions, mornings, afternoons and evenings.  Sometimes it will go out a a minute or two.  Other times it will be out for hours.   Since the feature is involved with automatic braking, this poses a safety hazard if there is any kind of driver distraction that occurs, even if it is from an external source like another vehicle.    This has been brought to the attention of the local Subaru dealer for ",
+                "components": "ELECTRICAL SYSTEM,FORWARD COLLISION AVOIDANCE"
+              },
+              {
+                "odi_number": 11541207,
+                "date": "06/25/2023",
+                "summary": "The Eyesight keeps disabling itself. And the infotainment system is not working properly. My car is at the dealership and they are telling me they are waiting for back up camera to come off backorder 10/3/23. This means my vehicle will have been at the dealership for repair a total of 45 days if backorder date is correct. I purchased this vehicle brand new 5/6/23. I have researched online and there is a class action lawsuit for the issue. The braking safety system does not work properly and warn",
+                "components": "ELECTRICAL SYSTEM,FORWARD COLLISION AVOIDANCE"
+              },
+              {
+                "odi_number": 11513176,
+                "date": "03/01/2023",
+                "summary": "I purchased a new 2023 Subaru Outback in December 2022. The two displays on my 2023 Subaru Outback (both the main entertainment one and the tiny dash one) randomly restart without notice and/or freeze and are unresponsive. This disables adaptive cruise control, EyeSight warnings, lane departure warnings, front collision warnings, rear back up camera, navigation, Apple Car Play, phone capabilities, and electrical display odometer. Even in reverse, the backup camera will appear at times and then f",
+                "components": "ELECTRICAL SYSTEM,FORWARD COLLISION AVOIDANCE"
+              }
+            ]
+          },
+          {
+            "category": "SERVICE BRAKES,FORWARD COLLISION AVOIDANCE",
+            "count": 2,
+            "examples": [
+              {
+                "odi_number": 11628020,
+                "date": "11/16/2024",
+                "summary": "The vehicle has received all scheduled and regular maintenance. I was driving right around the speed limit of 50 mph. Traffic was stopped ahead, and I had plenty of time and space to stop. I pressed the brake pedal, but continued to coast. I pressed it harder, all the way to the floor for at least four seconds, and there was no resistance, no feel of the antilock brakes kicking in, no emergency braking to avoid a collision, and no braking or slowing whatsoever. I could not safely swerve out of m",
+                "components": "SERVICE BRAKES,FORWARD COLLISION AVOIDANCE"
+              },
+              {
+                "odi_number": 11517305,
+                "date": "04/14/2023",
+                "summary": "I purchased the vehicle about a month ago and almost on a daily basis the precollision breaking system would cause the car to break when there was nothing there. It has picked up parked cars on the side of the road as well as breaked for no apparent reason. I have been almost rear ended a number of times. The precollision breaking system takes several steps to turn off and needs to be turned off every time the car is started. I spoke to the dealership and brought the car in to be looked at. I th",
+                "components": "SERVICE BRAKES,FORWARD COLLISION AVOIDANCE"
+              }
+            ]
+          },
+          {
+            "category": "VISIBILITY",
+            "count": 2,
+            "examples": [
+              {
+                "odi_number": 11627415,
+                "date": "11/24/2024",
+                "summary": "The WINDSHIELD cracked while I was driving on [XXX]  unexpectedly and could have caused an accident, on [XXX] at approximately [XXX] INFORMATION REDACTED PURSUANT TO THE FREEDOM OF INFORMATION ACT (FOIA), 5 U.S.C. 552(B)(6)",
+                "components": "VISIBILITY"
+              },
+              {
+                "odi_number": 11514823,
+                "date": "02/28/2023",
+                "summary": "The contact owns a 2023 Subaru Outback. The contact stated while driving at an undisclosed speed, he became aware that hundreds of tiny air bubbles had formed over the front windshield. Additionally, there were air bubbles on a portion of the front driver\u2019s and passenger\u2019s side windows. The contact took the vehicle to a dealer where a service technician inspected the vehicle with a pen and claimed that the windows had been sandblasted which caused the failure. The contact disputed the claim and ",
+                "components": "VISIBILITY"
+              }
+            ]
+          },
+          {
+            "category": "POWER TRAIN",
+            "count": 2,
+            "examples": [
+              {
+                "odi_number": 11535932,
+                "date": "07/20/2023",
+                "summary": "The car will begin to jolt/shake when coming to a stop. It has been found to be the torque converter. We are at a loss. 10,000 miles and the car has major issues.   Just bought the car 28 days ago with just about 6700 miles. We\u2019ve put about 3,400 miles on the car and experience the issue almost every time we drive the car.  Due to the safety issues about the torque converter we no longer want this car in fear of what may happen.",
+                "components": "POWER TRAIN"
+              },
+              {
+                "odi_number": 11495223,
+                "date": "10/14/2022",
+                "summary": "Going down a steep incline shortly after staring car after it had been sitting about 3 hours after about 2500 feet the car had no power maximum speed was about 25MPH and could not accelerate. There was a wide edge that I was able to pull off on with about a 300 drop off on right side of car. After pulling off on edge. stopped turned engine off, sat about 20 seconds, restarted engine, checked to see that engine increased in RPM's when accelerator was engaged, RPM's increased  Drove next 4 days th",
+                "components": "POWER TRAIN"
+              }
+            ]
+          }
+        ]
+      },
+      "recalls": [
+        {
+          "campaign_number": "23V647000",
+          "report_date": "21/09/2023",
+          "component": "POWER TRAIN:DRIVELINE:DRIVESHAFT",
+          "summary": "Subaru of America, Inc. (Subaru) is recalling certain 2023 Outback, Legacy, Ascent, and Impreza vehicles.  The center support bolts for the driveshaft may loosen, resulting in the disconnection of the front end of the driveshaft.",
+          "consequence": "Separation of the front end of the driveshaft increases the risk of a crash.",
+          "remedy": "Dealers will clean the bolt mounting surfaces of the center support brace and install new bolts, free of charge.  Owner notification letters were mailed November 20, 2023.  Owners may contact Subaru's customer service at 1-844-373-6614.  Subaru's number for this recall is WRN-23.",
+          "notes": "Owners may also contact the National Highway Traffic Safety Administration Vehicle Safety Hotline at 1-888-327-4236 (TTY 1-800-424-9153), or go to www.nhtsa.gov."
+        },
+        {
+          "campaign_number": "23V755000",
+          "report_date": "09/11/2023",
+          "component": "POWER TRAIN:AUTOMATIC TRANSMISSION:PARK/NEUTRAL START INTERLOCK SWITCH",
+          "summary": "Subaru of America, Inc. is recalling certain model year 2021 Crosstrek, 2022 Forester, 2021-2023 Legacy, and Outback vehicles.  An insufficient weld may allow water to enter the inhibitor switch, causing it to fail.",
+          "consequence": "An inoperative inhibitor switch may prevent the reverse lights from illuminating and the rearview camera image from displaying, increasing the risk of a crash.",
+          "remedy": "Dealers will replace the inhibitor switch, free of charge.  Owner notification letters were mailed January 8, 2024.  Owners may contact Subaru customer service at 1-800-782-2783.  Subaru's number for this recall is WRQ-23.",
+          "notes": "Owners may also contact the National Highway Traffic Safety Administration Vehicle Safety Hotline at 1-888-327-4236 (TTY 1-800-424-9153), or go to www.safercar.gov."
+        }
+      ],
+      "known_issues_from_field": [
+        {
+          "issue": "Windshield spontaneous cracking / fragility",
+          "severity": "HIGH",
+          "frequency": "Very Common",
+          "description": "Front windshield develops cracks spontaneously or from minimal rock impact. Stress cracks appear from edges, often overnight while parked. Known issue across 2020-2024 Outback models.",
+          "diagnostic_steps": [
+            "Inspect crack origin point - stress cracks start from edge with no impact point",
+            "Check for impact point vs stress fracture - impacts show star/bullseye pattern",
+            "Document crack location, length, and growth pattern with photos",
+            "Check if EyeSight cameras are affected by crack location",
+            "Note ambient temperature at time of discovery"
+          ],
+          "common_fix": "Windshield replacement with OEM glass. Requires EyeSight recalibration after replacement ($300-500 additional). Subaru generally does not warranty this.",
+          "tsb_related": "None specific - this is a widespread design/material concern",
+          "customer_talking_points": "This is a known characteristic of Subaru windshields. The glass used is thinner than some competitors for weight savings. Replacement requires EyeSight recalibration which adds to cost."
+        },
+        {
+          "issue": "EyeSight system intermittent failure / disabling",
+          "severity": "HIGH",
+          "frequency": "Common",
+          "description": "EyeSight driver assist system intermittently disables itself. Affects cruise control, pre-collision braking, and lane departure. Can happen in various weather and lighting conditions.",
+          "diagnostic_steps": [
+            "Check for DTCs related to EyeSight cameras (Subaru Select Monitor required)",
+            "Inspect windshield condition in camera viewing area",
+            "Clean camera lenses and surrounding windshield area",
+            "Check for software updates available",
+            "Verify camera bracket alignment",
+            "Test in various lighting conditions to reproduce"
+          ],
+          "common_fix": "Software update via SSM, windshield cleaning, camera recalibration. In some cases camera module replacement.",
+          "tsb_related": "Check latest TSB list for EyeSight software updates",
+          "customer_talking_points": "The EyeSight system uses dual cameras behind the windshield. It can be sensitive to windshield condition, weather, and lighting. A software update may resolve the issue."
+        },
+        {
+          "issue": "Infotainment system freezing / crashing",
+          "severity": "MEDIUM",
+          "frequency": "Common",
+          "description": "STARLINK infotainment system freezes, goes blank, or reboots while driving. Affects navigation, backup camera display, and climate controls.",
+          "diagnostic_steps": [
+            "Check current software version",
+            "Check for available OTA updates",
+            "Perform system reset (hold power button 10 seconds)",
+            "Check for aftermarket accessories interfering (USB devices, phone chargers)",
+            "Check if issue is related to specific phone/CarPlay/Android Auto connection"
+          ],
+          "common_fix": "Software update, hard reset, or head unit replacement in persistent cases.",
+          "customer_talking_points": "The infotainment system may need a software update. We can perform a reset and check for updates."
+        },
+        {
+          "issue": "CVT hesitation / judder at low speed",
+          "severity": "MEDIUM",
+          "frequency": "Moderate",
+          "description": "CVT transmission exhibits hesitation, judder, or jerking at low speeds, particularly when decelerating to a stop or from a stop.",
+          "diagnostic_steps": [
+            "Check CVT fluid level and condition",
+            "Check for DTCs with SSM",
+            "Road test to reproduce - note speed, throttle position, and temperature",
+            "Check TCM software version for available updates",
+            "Monitor CVT line pressure during road test if possible"
+          ],
+          "common_fix": "TCM software update and CVT fluid replacement. In severe cases, valve body replacement.",
+          "customer_talking_points": "The CVT may benefit from a software update and fluid service. This can improve the smoothness of the transmission at low speeds."
+        },
+        {
+          "issue": "Battery drain / parasitic draw",
+          "severity": "MEDIUM",
+          "frequency": "Moderate",
+          "description": "Battery drains when vehicle is parked for 2+ days. Vehicle fails to start. Multiple electrical modules may not properly enter sleep mode.",
+          "diagnostic_steps": [
+            "Test battery condition (load test and CCA)",
+            "Measure parasitic draw with ammeter (should be under 50mA after 30 min sleep)",
+            "Check STARLINK module for proper sleep mode",
+            "Check for aftermarket accessories",
+            "Verify no interior lights staying on (dome, glove box, trunk)",
+            "Check DCM (Data Communication Module) for firmware update"
+          ],
+          "common_fix": "Battery replacement, DCM update, or identification and correction of parasitic draw source.",
+          "customer_talking_points": "Modern vehicles have many electronic modules that can sometimes prevent the battery from holding charge when parked. We'll test the battery and check for any modules that aren't sleeping properly."
+        },
+        {
+          "issue": "Automatic Emergency Braking false activation",
+          "severity": "HIGH",
+          "frequency": "Moderate",
+          "description": "Pre-collision braking or RAB activates unnecessarily when no obstacle is present. Can occur at highway speeds or when parking.",
+          "diagnostic_steps": [
+            "Check for DTCs related to AEB/RAB systems",
+            "Inspect front radar sensor and camera for obstructions",
+            "Check sensor bracket alignment",
+            "Check for software updates",
+            "Test reproduce conditions (parking lots, highway, specific roads)"
+          ],
+          "common_fix": "Sensor cleaning, software update, or sensor replacement/recalibration.",
+          "customer_talking_points": "The emergency braking system uses sensors that can occasionally activate when not needed. We'll check the sensors and update the software."
+        }
+      ]
+    },
+    {
+      "id": "subaru_forester_2023",
+      "year": 2023,
+      "make": "Subaru",
+      "model": "Forester",
+      "trims": [
+        "Base",
+        "Premium",
+        "Sport",
+        "Limited",
+        "Touring",
+        "Wilderness"
+      ],
+      "engines": [
+        {
+          "code": "FB25D",
+          "displacement": "2.5L",
+          "type": "DOHC Boxer 4-cylinder Direct Injection",
+          "hp": 182,
+          "torque": 176,
+          "fuel": "Regular"
+        }
+      ],
+      "transmission": {
+        "type": "Lineartronic CVT",
+        "note": "Continuously Variable Transmission"
+      },
+      "drivetrain": "Symmetrical All-Wheel Drive",
+      "safety_systems": [
+        "EyeSight Driver Assist (dual camera)",
+        "Pre-Collision Braking",
+        "Adaptive Cruise Control",
+        "Lane Departure Warning",
+        "Lane Keep Assist",
+        "Reverse Automatic Braking (RAB)",
+        "Blind-Spot Detection",
+        "Rear Cross-Traffic Alert"
+      ],
+      "nhtsa_complaints": {
+        "total_complaints": 63,
+        "top_issues": [
+          {
+            "category": "VISIBILITY/WIPER",
+            "count": 10,
+            "examples": [
+              {
+                "odi_number": 11649212,
+                "date": "03/07/2025",
+                "summary": "Windshield developed a crack during a week with wild temperature swings. There was no incident leading up to the development of the crack that would have caused an initial chip or point of failure. The initial crack appeared during the day where the temperature went from the mid-60s to below freezing with precipitation in a matter of hours. Crack was not present in warm AM and appeared during cold PM. It grew (initial crack ended where the scotch tape is) during a day later that week with anothe",
+                "components": "VISIBILITY/WIPER"
+              },
+              {
+                "odi_number": 11590835,
+                "date": "05/09/2024",
+                "summary": "Rear windshield burst for no apparent reason in car less than one year old while car was stopped at a stop light.  Other traffic was also stopped around the car.  There was no obvious cause (rock, etc.), plus the rear windshield  appeared to shatter as much outward as it did inward.  Fortunately car was stopped because it was very startling and could have affected driving.  Also fortunately, there was no one in the back who could have been hurt by the glass. Reported it to Subaru, but they denie",
+                "components": "VISIBILITY/WIPER"
+              },
+              {
+                "odi_number": 11571264,
+                "date": "07/01/2023",
+                "summary": "Got a crack on the windshield after owning the vehicle for under 5 months. There was no apparent pebble/stone and one morning i just saw that there was a crack on the windshield. It was also active that means was growing with time.  My dealer also said that it won't be covered under warranty.   I used my insurance to get it fixed however it seems like this is a consistent problem with Subaru's and they are well aware of it. This is well known issue in the online Subaru groups however Subaru has ",
+                "components": "VISIBILITY/WIPER"
+              }
+            ]
+          },
+          {
+            "category": "UNKNOWN OR OTHER",
+            "count": 9,
+            "examples": [
+              {
+                "odi_number": 11686174,
+                "date": "09/10/2025",
+                "summary": "This complaint is in relation to a 2023 Subaru Forester. The car was purchased new at White River Subaru in White River Junction, VT less than two years ago. Before it reached 30,000 miles the following problem has arisen 1) rusty brakes and pads 2) a wheel bearing had to be replaced 3) a faulty tire pressure gauge. However, must concerning, I noticed greasy film was forming on the inside of the windshield. I took it dealership and was told there was an AC leak in the engine bay. The service sho",
+                "components": "UNKNOWN OR OTHER"
+              },
+              {
+                "odi_number": 11671639,
+                "date": "07/06/2025",
+                "summary": "I had been driving for 30 minutes from Mokena towards Rosemont. I was on [XXX] near rosemont when the rear passenger-side window spontaneously shattered without warning. There was a loud pop, and tempered glass collapsed inward into the rear cargo area and passenger footwell. Some of the glass traveling quite far. I did not hear or see any object strike the vehicle, and there is no visible damage or point of impact on the exterior or interior trim. I have also not been able to locate any evidenc",
+                "components": "UNKNOWN OR OTHER"
+              },
+              {
+                "odi_number": 11666169,
+                "date": "05/29/2025",
+                "summary": "Air leak  puncture on my left front tire driver side",
+                "components": "UNKNOWN OR OTHER"
+              }
+            ]
+          },
+          {
+            "category": "FORWARD COLLISION AVOIDANCE",
+            "count": 4,
+            "examples": [
+              {
+                "odi_number": 11670232,
+                "date": "06/25/2025",
+                "summary": "In driving our 2023 Subaru Forester at 45mph at 10:00 am in the  morning, with NO cars in front of us, in back of us, or on either side of us- suddenly the brakes locked up! Had there been anyone behind us, there could have been a dangerous collision. We have owned this car for 2 years, done all maintenance on it, and have NEVER had this happen before. We feel unsafe driving it now.  We pulled the car over, got out to look under the car, thinking maybe we hit something in the road...but there wa",
+                "components": "FORWARD COLLISION AVOIDANCE"
+              },
+              {
+                "odi_number": 11595249,
+                "date": "06/19/2024",
+                "summary": "We were traveling on a limited access highway at approximately 65 miles an hour. Both the adaptive cruise control and the driver assist were engaged. A car approximately four car lengths ahead of us exited the highway into the breakdown lane. My car slammed on its brakes and reduced speed to less than 40 miles an hour with no warning. Had there been a vehicle behind us we certainly would have been hit. This is not the first time we have had difficulty with the adaptive cruise control braking unp",
+                "components": "FORWARD COLLISION AVOIDANCE"
+              },
+              {
+                "odi_number": 11570560,
+                "date": "02/07/2024",
+                "summary": "If you have the adaptive cruise control (or regular cruise if you disable adaptive) and accelerate to pass another vehicle, as soon as you take your foot off the gas to coast back down to the cruise setting the car slams on the brakes to bring the vehicle back to the set speed. I have almost been rear ended several times when this happens.  This has occurred since I purchased the vehicle.  The dealership says this is a design feature and not a defect.  It doesn't matter what speed the cruise is ",
+                "components": "FORWARD COLLISION AVOIDANCE"
+              }
+            ]
+          },
+          {
+            "category": "AIR BAGS",
+            "count": 3,
+            "examples": [
+              {
+                "odi_number": 11722519,
+                "date": "03/06/2026",
+                "summary": "1. The passenger seat air bag turn on mechanism malfunctions in a 2023 Subaru Forester Limited. The seat mechanism can be tested (and has been tested) upon request. 2. An adult that weighs 104lbs is not detected when in the seat, so the air bag is not turned on. 3. The problem has been reproduced by two dealers. 4. No other parties have inspected the car seats or the mechanism. 5. The problem indicator is the status light that shows the air bag as off or on.  6. Testing of the car by the dealer ",
+                "components": "AIR BAGS"
+              },
+              {
+                "odi_number": 11628405,
+                "date": "12/01/2024",
+                "summary": "The front passenger side air bag remains turned off when a 105 pound adult sits in it, but turns on when a 185 pound adult sits in it.  Subaru service informs us that it is factory set so that it will not deploy when a child is in the seat and cannot be adjusted.  This puts any small adult or teenager sits in the front passenger seat.",
+                "components": "AIR BAGS"
+              },
+              {
+                "odi_number": 11571449,
+                "date": "09/04/2023",
+                "summary": "The contact owns a 2023 Subaru Forester. The contact stated that the front passenger\u2019s side occupant sensor failed to recognize a petite, smaller individual seated in the front passenger\u2019s seat. The dealer was notified of failure and referred the contact to the manufacturer. The manufacturer was notified, and the contact inquired about the weight requirement for the passenger occupant sensor, and the manufacturer did not answer the question. The vehicle was not repaired or diagnosed. The failure",
+                "components": "AIR BAGS"
+              }
+            ]
+          },
+          {
+            "category": "EXTERIOR LIGHTING",
+            "count": 3,
+            "examples": [
+              {
+                "odi_number": 11641177,
+                "date": "08/28/2023",
+                "summary": "Factory installed headlights are dangerous as the low beam has a black line approximately halfway in the field of vision. Subaru states this is to keep from blinding oncoming vehicles. Driving in town not too bad, however in rural mountain areas with winding roads the headlights do not provide necessary lighting causing driving to be extremely dangerous. Low beams should not blind oncoming traffic. Dealer states these \"projection\" headlights cannot be replaced with traditional headlights. Compla",
+                "components": "EXTERIOR LIGHTING"
+              },
+              {
+                "odi_number": 11540943,
+                "date": "08/24/2023",
+                "summary": "The low beam headlights project a light field which has distracting dark spots within the field.  When turning the car the dark spots move as the headlight field moves and appear to be an animal or unknown object in the field of vision.  We asked the Subaru dealer for a different type of headlight.  The dealer said Subaru has no other options for headlights. We were not told about this feature when we purchased the car.  And we did not test drive the car at night. The dark spots are dangerously ",
+                "components": "EXTERIOR LIGHTING"
+              },
+              {
+                "odi_number": 11533802,
+                "date": "06/01/2023",
+                "summary": "No incident yet. Have LED projection lights which are supposed to prevent glare to oncoming drivers. Live in rural area where there is little lighting. Even on dim, lights apparently are too bright & other drivers flash their brights as if I have them on bright. Don't understand how this helps safety. The projection prevents me from seeing the top 2/3 of screen at night the dark cut off line allows me to see very little in front of me. I will try to upload photos. Have almost hit deer. Have to p",
+                "components": "EXTERIOR LIGHTING"
+              }
+            ]
+          },
+          {
+            "category": "TIRES",
+            "count": 2,
+            "examples": [
+              {
+                "odi_number": 11718925,
+                "date": "01/03/2026",
+                "summary": "see attached",
+                "components": "TIRES"
+              },
+              {
+                "odi_number": 11564626,
+                "date": "01/10/2024",
+                "summary": "225/60R17 99T",
+                "components": "TIRES"
+              }
+            ]
+          },
+          {
+            "category": "ENGINE",
+            "count": 2,
+            "examples": [
+              {
+                "odi_number": 11698669,
+                "date": "04/04/2025",
+                "summary": "Vehicle had just received an oil change at the dealership and the car caught fire. Oil leaked onto the catalytic converter and ignited. Car was a total loss. After my own review, there are several instances of this happening and many customers have experienced similar fires. The oil filter is inverted which makes leaks more susceptible",
+                "components": "ENGINE"
+              },
+              {
+                "odi_number": 11551364,
+                "date": "04/24/2023",
+                "summary": "The contact owned a 2023 Subaru Forrester. The contact stated that while his wife was driving in reverse mode, the vehicle independently accelerated, which caused a crash.  The contact stated that the vehicle simultaneously crashed into a parked vehicle and a concrete wall. The vehicle was towed to a collision center and then towed to a tow yard.  A police report was filed. The vehicle was condemned as a total loss by the insurance company. The contact also stated that damage was caused to the p",
+                "components": "ENGINE"
+              }
+            ]
+          },
+          {
+            "category": "ELECTRICAL SYSTEM",
+            "count": 2,
+            "examples": [
+              {
+                "odi_number": 11638961,
+                "date": "01/27/2025",
+                "summary": "The battery is getting drained by the car's system",
+                "components": "ELECTRICAL SYSTEM"
+              },
+              {
+                "odi_number": 11568075,
+                "date": "01/01/2024",
+                "summary": "The vehicles battery does not hold a charge during short term, (3-5 weeks of storage).  I understand that some prior years of Subaru vehicles have this same problem and there is currently a recall for this.  I wonder if this battery problem exists in newer Subaru Foresters.  When we purchased this vehicle as new we observed that the Dealership was having problems maintaining the charge on at least two other new Forester vehicles on display and had to replace the battery in one of these to start ",
+                "components": "ELECTRICAL SYSTEM"
+              }
+            ]
+          },
+          {
+            "category": "LANE DEPARTURE",
+            "count": 2,
+            "examples": [
+              {
+                "odi_number": 11637451,
+                "date": "01/03/2024",
+                "summary": "On January 3, 2024, my Subaru forester suddenly lost emergency safety features such as the blind spot warning system.  Many warning messages flashed on the screen as I drove north on rt 1 and the blind spot warning system was totally disabled.  I believe that other safety features were likewise disabled, as well.  I was upset as I had traded in my 2015 Forester because it lacked those safety features that in my new car had abruptly just stopped working! I drove my car to the Concordville Subaru ",
+                "components": "LANE DEPARTURE"
+              },
+              {
+                "odi_number": 11625984,
+                "date": "11/15/2024",
+                "summary": "I was driving on a two lane highway in the mountains and came around a small right-veering turn in the road. I straightened out the wheel to resume traveling straight, and my car\u2019s auto-steer kicked in and pulled left into the center divider, and then right across two lanes and crashed into the side of the mountain. The auto-steer has pulled me out of lanes prior to this incident as well.",
+                "components": "LANE DEPARTURE"
+              }
+            ]
+          },
+          {
+            "category": "STRUCTURE",
+            "count": 2,
+            "examples": [
+              {
+                "odi_number": 11609615,
+                "date": "06/02/2024",
+                "summary": "See attached document for complaint.",
+                "components": "STRUCTURE"
+              },
+              {
+                "odi_number": 11515459,
+                "date": "03/20/2023",
+                "summary": "Door garnish panel (Part Number 91112SJ570) came loose within about 2 weeks of delivery of the new vehicle. The date of the incident is uncertain as the missing part was discovered after the event.  The missing part is not available as it was not clear when or where the part fell off the vehicle.  The vehicle has been shown to a service centre at Subaru Serramonte who confirmed the part number of the missing part.  No investigation was offered as the missing part was not available.  No lamps, me",
+                "components": "STRUCTURE"
+              }
+            ]
+          }
+        ]
+      },
+      "recalls": [
+        {
+          "campaign_number": "23V754000",
+          "report_date": "09/11/2023",
+          "component": "POWER TRAIN:DRIVELINE:DRIVESHAFT",
+          "summary": "Subaru of America, Inc. (Subaru) is recalling certain 2024 Crosstrek, Impreza, 2023-2024 Forester, and 2023 WRX vehicles.  The front driveshaft assemblies' outer race may develop cracks and break.",
+          "consequence": "A broken driveshaft can cause a loss of drive power while driving or vehicle rollaway when the vehicle is in park without the parking brake engaged.  Either of these scenarios can increase the risk of a crash.",
+          "remedy": "Dealers will inspect and replace the left and right front driveshafts as necessary, free of charge.  Owner notification letters were mailed January 8, 2024.  Owners may contact Subaru's customer service at 1-844-373-6614.  Subaru's number for this recall is WRP-23.",
+          "notes": "Owners may also contact the National Highway Traffic Safety Administration Vehicle Safety Hotline at 1-888-327-4236 (TTY 1-800-424-9153), or go to www.nhtsa.gov."
+        }
+      ],
+      "known_issues_from_field": [
+        {
+          "issue": "EyeSight intermittent failure",
+          "severity": "HIGH",
+          "frequency": "Common",
+          "description": "Same EyeSight issues as Outback platform. System disables intermittently.",
+          "diagnostic_steps": [
+            "Same as Outback EyeSight procedure"
+          ],
+          "common_fix": "Software update, camera recalibration, windshield inspection.",
+          "customer_talking_points": "Same as Outback."
+        },
+        {
+          "issue": "Windshield cracking",
+          "severity": "HIGH",
+          "frequency": "Common",
+          "description": "Same windshield fragility issue as Outback platform.",
+          "diagnostic_steps": [
+            "Same as Outback windshield procedure"
+          ],
+          "common_fix": "OEM windshield replacement + EyeSight recalibration.",
+          "customer_talking_points": "Same as Outback."
+        },
+        {
+          "issue": "Excessive oil consumption",
+          "severity": "MEDIUM",
+          "frequency": "Moderate",
+          "description": "FB25 engine may consume oil between changes at a higher than expected rate.",
+          "diagnostic_steps": [
+            "Perform oil consumption test per Subaru procedure",
+            "Check current oil level and condition",
+            "Inspect for external leaks (valve covers, oil pan, oil cooler lines)",
+            "Check PCV valve operation",
+            "Note mileage between oil additions"
+          ],
+          "common_fix": "Oil consumption test. If exceeds 1 qt per 1200 miles, may warrant short block replacement under warranty extension.",
+          "customer_talking_points": "Some Subaru engines can use oil between changes. We'll do a monitored oil consumption test to determine if it's within spec."
+        },
+        {
+          "issue": "Airbag sensor malfunction",
+          "severity": "HIGH",
+          "frequency": "Moderate",
+          "description": "Passenger occupant detection sensor intermittently reads incorrectly. Airbag OFF light comes on with adult passenger seated.",
+          "diagnostic_steps": [
+            "Check DTCs with SSM for SRS codes",
+            "Inspect seat wiring harness connector under passenger seat",
+            "Check for TSBs on occupant detection sensor calibration",
+            "Verify seat position and passenger weight"
+          ],
+          "common_fix": "Seat sensor recalibration or replacement. Wiring harness inspection.",
+          "customer_talking_points": "The passenger seat has a weight sensor that controls whether the airbag deploys. We'll recalibrate or replace the sensor."
+        }
+      ]
+    },
+    {
+      "id": "subaru_crosstrek_2023",
+      "year": 2023,
+      "make": "Subaru",
+      "model": "Crosstrek",
+      "trims": [
+        "Base",
+        "Premium",
+        "Sport",
+        "Limited"
+      ],
+      "engines": [
+        {
+          "code": "FB20D",
+          "displacement": "2.0L",
+          "type": "DOHC Boxer 4-cylinder Direct Injection",
+          "hp": 152,
+          "torque": 145,
+          "fuel": "Regular"
+        },
+        {
+          "code": "FB25D",
+          "displacement": "2.5L",
+          "type": "DOHC Boxer 4-cylinder Direct Injection",
+          "hp": 182,
+          "torque": 176,
+          "fuel": "Regular",
+          "note": "Sport and Limited trims"
+        }
+      ],
+      "transmission": {
+        "type": "Lineartronic CVT",
+        "note": "6-speed manual available on Base and Premium with 2.0L"
+      },
+      "drivetrain": "Symmetrical All-Wheel Drive",
+      "safety_systems": [
+        "EyeSight Driver Assist (dual camera)",
+        "Pre-Collision Braking",
+        "Adaptive Cruise Control",
+        "Lane Departure Warning",
+        "Lane Keep Assist",
+        "Rear Cross-Traffic Alert"
+      ],
+      "nhtsa_complaints": {
+        "total_complaints": 29,
+        "top_issues": [
+          {
+            "category": "UNKNOWN OR OTHER",
+            "count": 7,
+            "examples": [
+              {
+                "odi_number": 11603557,
+                "date": "07/12/2024",
+                "summary": "On July 12, 2024 I was driving down the highway when my sunroof suddenly shattered. It sounded like an explosion or a gun went off. I nearly crashed my vehicle. There were no vehicles in front of me however there were vehicles behind me. I looked back into my rear view mirror and saw vehicles veering out of the way as parts of sunroof glass flew. Thankfully I was able to pull over safely. No injuries or accidents occurred. That same day I notified my dealership and they asked me to bring the veh",
+                "components": "UNKNOWN OR OTHER"
+              },
+              {
+                "odi_number": 11568074,
+                "date": "08/02/2023",
+                "summary": "Windshield cracked two times in the first year.  I feel these windshields are more susceptible to cracking when a rock hits them.  Very expensive to replace the windshields.",
+                "components": "UNKNOWN OR OTHER"
+              },
+              {
+                "odi_number": 11567105,
+                "date": "01/22/2023",
+                "summary": "head unit/infotainment works intermittently meaning all the safety features, car play works intermittently the hands free safety features work intermittently also maps and radio all malfunctions intermittently. At 800 miles I have a paint chip on the back of the cars bumper paint bubbling on the rear tail gate I felt this to be a defect in the paint but Subaru disagreed. Subaru sent me an email for an update to correct infotainment problems that I am suppose to do myself didn't say to take it to",
+                "components": "UNKNOWN OR OTHER"
+              }
+            ]
+          },
+          {
+            "category": "VISIBILITY/WIPER",
+            "count": 4,
+            "examples": [
+              {
+                "odi_number": 11638103,
+                "date": "01/13/2025",
+                "summary": "The component that is compromised on my '23 Subaru Crosstrek Sport is the windshield. My vehicle is available for inspection upon request.  Monday, Jan 13, 2025, a crack formed on my windshield. The crack happened on the inside of the vehicle. It was positioned above the defroster vent on the driver's side, and I saw it happen right before my eyes. I immediately inspected the windshield from the exterior of the car. The crack cannot be felt by touch on the exterior of the windshield. There was n",
+                "components": "VISIBILITY/WIPER"
+              },
+              {
+                "odi_number": 11634292,
+                "date": "03/21/2023",
+                "summary": "Windshield began to crack in the lower right corner (sitting in drivers seat) over a year ago, was replaced and just noticed a crack again recently starting in the same spot.",
+                "components": "VISIBILITY/WIPER"
+              },
+              {
+                "odi_number": 11520861,
+                "date": "05/06/2023",
+                "summary": "A 12-in crack formed spontaneously in the window while I was sitting at a stoplight.",
+                "components": "VISIBILITY/WIPER"
+              }
+            ]
+          },
+          {
+            "category": "ENGINE",
+            "count": 3,
+            "examples": [
+              {
+                "odi_number": 11721593,
+                "date": "02/14/2026",
+                "summary": "Passenger side valve cover gasket and spark plug seal failure.",
+                "components": "ENGINE"
+              },
+              {
+                "odi_number": 11692207,
+                "date": "10/07/2025",
+                "summary": "Oct 7 2025 when me and my 6 year old daughter. Was leaving after picking her up at mom i drove off then came to stop sign so i slowly hit breaks and car accelerated  very dangerous im very concerned",
+                "components": "ENGINE"
+              },
+              {
+                "odi_number": 11688559,
+                "date": "01/01/2024",
+                "summary": "When driving after let of throttle it some time floors it 4 times",
+                "components": "ENGINE"
+              }
+            ]
+          },
+          {
+            "category": "UNKNOWN OR OTHER,VISIBILITY/WIPER",
+            "count": 2,
+            "examples": [
+              {
+                "odi_number": 11548917,
+                "date": "05/01/2023",
+                "summary": "Like many others with Subaru EyeSight acoustic auto glass, windshield is beginning to crack and pit despite never being outdoors, and not experiencing rock chipping. This glass is unsafe, costly, defective, and needs a recall. Issue appeard May 23, three months after purchase.",
+                "components": "UNKNOWN OR OTHER,VISIBILITY/WIPER"
+              },
+              {
+                "odi_number": 11517966,
+                "date": "04/19/2023",
+                "summary": "Overall I\u2019m disappointed in the quality of the manufactured parts and accessories. It leads me to believe low grade materials were used in manufacturing this vehicle.  My vehicle is brand new and has 2500 miles on it and the front windshield has a crack that is obvious to the naked eye that it was not caused by a rock hitting it while driving. If low grade quality (thin glass) was used to produce this vehicle and it easily breaks/cracks this is a safety hazard for drivers and passengers.",
+                "components": "UNKNOWN OR OTHER,VISIBILITY/WIPER"
+              }
+            ]
+          },
+          {
+            "category": "FORWARD COLLISION AVOIDANCE",
+            "count": 1,
+            "examples": [
+              {
+                "odi_number": 11714624,
+                "date": "01/30/2026",
+                "summary": "I was driving today January 30th 2026 on the road going 35 mph into the sunlight and all of the sudden my vehicle acted like I slammed on my brakes and I jerked forward almost hitting my chin in the steering wheel. Luckily no one was close behind me or I could have easily been hit. There was nothing in front of me so emergency brakes should not have deployed.",
+                "components": "FORWARD COLLISION AVOIDANCE"
+              }
+            ]
+          },
+          {
+            "category": "SUSPENSION",
+            "count": 1,
+            "examples": [
+              {
+                "odi_number": 11704596,
+                "date": "12/10/2025",
+                "summary": "I've never taken my 23 crosstrek off the pavement I'm driving down hyw and my rear struts break my crosstrek has 38 thousand miles on it and it's only 3 and 1/2 years old I've owned many cars were if drove hundreds of thousands mile and none of them broke there struts going down the hyw",
+                "components": "SUSPENSION"
+              }
+            ]
+          },
+          {
+            "category": "VISIBILITY",
+            "count": 1,
+            "examples": [
+              {
+                "odi_number": 11697914,
+                "date": "08/31/2025",
+                "summary": "The contact owns a 2023 Subaru Crosstrek. The contact stated that while her grandson was driving at an undisclosed speed, the front driver's side windshield cracked unexpectedly. The windshield had developed a crack without impact. The vehicle was taken to the dealer, who determined that the front windshield needed to be replaced. The vehicle was not repaired. The manufacturer was made aware of the failure. The failure mileage was 29,000.",
+                "components": "VISIBILITY"
+              }
+            ]
+          },
+          {
+            "category": "SERVICE BRAKES,LANE DEPARTURE,FORWARD COLLISION AVOIDANCE",
+            "count": 1,
+            "examples": [
+              {
+                "odi_number": 11681261,
+                "date": "08/01/2025",
+                "summary": "THE BRAKE PEDAL SOME TIME GOES DOWN TO THE FLOOR.  I BROUGHT VEHICLE IN SUBARU DEALER FOR CHECK UP.  THEY STATED THAT THE POWER BRAKE BOOSTER IS DEFECTIVE, NEED TO BE REPLACE.  THIS IS 2023 VEHICLE AND THE MILEAGE IS ONLY 46,000 MILES.  For safety to me and other drivers please investigate this safety concern.",
+                "components": "SERVICE BRAKES,LANE DEPARTURE,FORWARD COLLISION AVOIDANCE"
+              }
+            ]
+          },
+          {
+            "category": "AIR BAGS,SEAT BELTS",
+            "count": 1,
+            "examples": [
+              {
+                "odi_number": 11672042,
+                "date": "07/04/2025",
+                "summary": "Driving down highway in center lane, at or under speed limit, rainy conditions. Unexpectedly hydroplaned when transitioning from asphalt to bridge. Collided head-on with guardrail on right-hand side of road. Car then rotated and driver side rear collided with guardrail again.  Airbags did not deploy, and during initial head on collision with barrier, driver seatbelt came unlatched from locking mechanism. No inspections at this time. No warning lights prior to crash. Potential for significant har",
+                "components": "AIR BAGS,SEAT BELTS"
+              }
+            ]
+          },
+          {
+            "category": "AIR BAGS,VEHICLE SPEED CONTROL",
+            "count": 1,
+            "examples": [
+              {
+                "odi_number": 11655198,
+                "date": "04/02/2025",
+                "summary": "The contact owns a 2023 Subaru Crosstrek. The contact stated that while turning into a parking spot at 20 MPH and upon depressing the brake pedal, the vehicle continued to accelerate, causing the contact to crash the front of the vehicle into the concrete wall. The vehicle came to a stop upon impact. The air bags did not deploy. The vehicle was towed to a local autobody center. No warning lights were illuminated. A police report was filed. The vehicle was not destroyed. The contact seated in the",
+                "components": "AIR BAGS,VEHICLE SPEED CONTROL"
+              }
+            ]
+          }
+        ]
+      },
+      "recalls": [],
+      "known_issues_from_field": [
+        {
+          "issue": "Windshield cracking",
+          "severity": "HIGH",
+          "frequency": "Common",
+          "description": "Same windshield fragility as other Subaru Global Platform vehicles.",
+          "diagnostic_steps": [
+            "Same as Outback windshield procedure"
+          ],
+          "common_fix": "OEM windshield replacement + EyeSight recalibration.",
+          "customer_talking_points": "Same as Outback."
+        },
+        {
+          "issue": "Engine hesitation / stalling (2.0L)",
+          "severity": "MEDIUM",
+          "frequency": "Moderate",
+          "description": "2.0L FB20 engine can exhibit hesitation or momentary stall when accelerating from stop, especially when cold.",
+          "diagnostic_steps": [
+            "Check for DTCs",
+            "Inspect throttle body for carbon buildup",
+            "Check MAF sensor",
+            "Check for software updates for ECM",
+            "Monitor fuel trims at idle and during acceleration"
+          ],
+          "common_fix": "Throttle body cleaning, ECM software update.",
+          "customer_talking_points": "The engine may need a throttle body cleaning and software update to improve cold-start behavior."
+        },
+        {
+          "issue": "CVT judder under light acceleration",
+          "severity": "MEDIUM",
+          "frequency": "Moderate",
+          "description": "CVT exhibits a judder or shudder during light acceleration, particularly at low speeds.",
+          "diagnostic_steps": [
+            "Check CVT fluid level and condition",
+            "Road test to reproduce and document conditions",
+            "Check TCM for software updates",
+            "Monitor CVT operating parameters with SSM"
+          ],
+          "common_fix": "CVT fluid drain and fill, TCM software update.",
+          "customer_talking_points": "A transmission fluid service and software update can often resolve this type of concern."
+        },
+        {
+          "issue": "Rear brake squeal",
+          "severity": "LOW",
+          "frequency": "Common",
+          "description": "Rear brakes develop squeal, particularly in cold/damp conditions or after sitting overnight.",
+          "diagnostic_steps": [
+            "Inspect rear brake pad thickness and condition",
+            "Inspect rotor surface for glazing or rust buildup",
+            "Check for pad material transfer on rotor",
+            "Verify correct pad part number installed",
+            "Check caliper slide pins for proper lubrication"
+          ],
+          "common_fix": "Clean and lubricate caliper slides, resurface or replace rotors, replace pads with updated part number if available.",
+          "customer_talking_points": "Brake squeal in cold or damp conditions is common and usually not a safety concern. We can clean and lubricate the brake components to reduce the noise."
+        }
+      ]
+    }
+  ],
+  "tsbs": [
+    {
+      "id": "tsb_23V647000",
+      "number": "23V647000",
+      "type": "RECALL",
+      "title": "Driveshaft Center Support Bolts May Loosen",
+      "affected_vehicles": [
+        "2023 Outback",
+        "2023 Legacy",
+        "2023 Ascent",
+        "2023 Impreza"
+      ],
+      "symptom": "Vibration, noise from undercarriage, potential driveshaft disconnection",
+      "cause": "Center support bolts for driveshaft may loosen over time",
+      "fix": "Inspect and retorque driveshaft center support bolts. Replace if damaged.",
+      "parts": [],
+      "labor_hours": 0.5
+    },
+    {
+      "id": "tsb_23V755000",
+      "number": "23V755000",
+      "type": "RECALL",
+      "title": "Inhibitor Switch Water Intrusion (Insufficient Weld)",
+      "affected_vehicles": [
+        "2021-2023 Outback",
+        "2021-2023 Legacy",
+        "2022 Forester",
+        "2021 Crosstrek"
+      ],
+      "symptom": "Vehicle may not start, transmission may not shift properly, warning lights illuminated",
+      "cause": "Insufficient weld on inhibitor switch housing allows water intrusion",
+      "fix": "Replace inhibitor switch",
+      "parts": [
+        "Inhibitor switch assembly"
+      ],
+      "labor_hours": 1.5
+    },
+    {
+      "id": "tsb_02-157-22R",
+      "number": "02-157-22R",
+      "type": "TSB",
+      "title": "CVT Judder / Hesitation at Low Speed",
+      "affected_vehicles": [
+        "2020-2023 Outback",
+        "2020-2023 Legacy",
+        "2020-2023 Forester",
+        "2020-2023 Crosstrek"
+      ],
+      "symptom": "Judder, hesitation, or jerking during low speed acceleration or deceleration",
+      "cause": "TCM calibration, CVT fluid condition",
+      "fix": "Update TCM software, replace CVT fluid with Subaru CVT Fluid (P/N SOA868V9350)",
+      "parts": [
+        "SOA868V9350 (CVT Fluid)"
+      ],
+      "labor_hours": 1.0
+    },
+    {
+      "id": "tsb_15-275-21",
+      "number": "15-275-21",
+      "type": "TSB",
+      "title": "Thermostat / Thermal Control Valve Failure",
+      "affected_vehicles": [
+        "2020-2023 Outback XT",
+        "2020-2023 Legacy XT",
+        "2022-2023 Outback Wilderness"
+      ],
+      "symptom": "Check engine light, engine overheating, coolant temperature fluctuation",
+      "cause": "Thermal control valve (TCV) internal failure",
+      "fix": "Replace thermal control valve. Subaru has extended warranty coverage to 10 years / 150,000 miles for this component.",
+      "parts": [
+        "Thermal control valve assembly"
+      ],
+      "labor_hours": 2.0,
+      "note": "Extended warranty applies - verify VIN eligibility"
+    },
+    {
+      "id": "tsb_11-200-22",
+      "number": "11-200-22",
+      "type": "TSB",
+      "title": "STARLINK Infotainment System Freeze / Reboot",
+      "affected_vehicles": [
+        "2020-2023 Outback",
+        "2020-2023 Legacy",
+        "2022-2023 Forester",
+        "2023 Crosstrek"
+      ],
+      "symptom": "Infotainment screen freezes, goes blank, reboots while driving, unresponsive touch",
+      "cause": "Software bug in head unit firmware",
+      "fix": "Update head unit software to latest version via USB or OTA. If issue persists, head unit replacement.",
+      "parts": [
+        "Software update (no parts for initial fix)"
+      ],
+      "labor_hours": 0.5
+    },
+    {
+      "id": "tsb_12-235-22",
+      "number": "12-235-22",
+      "type": "TSB",
+      "title": "EyeSight Intermittent Disable / Unavailable",
+      "affected_vehicles": [
+        "2020-2023 Outback",
+        "2020-2023 Legacy",
+        "2020-2023 Forester",
+        "2020-2023 Crosstrek"
+      ],
+      "symptom": "EyeSight disabled message on dash, cruise control unavailable, pre-collision warning absent",
+      "cause": "Camera module software, windshield contamination, or camera misalignment",
+      "fix": "Clean windshield in camera area, update EyeSight software, recalibrate cameras. Replace camera module if fault persists.",
+      "parts": [
+        "Software update initially, camera module if needed"
+      ],
+      "labor_hours": 1.0
+    },
+    {
+      "id": "tsb_11-215-23",
+      "number": "11-215-23",
+      "type": "TSB",
+      "title": "Battery Drain / Parasitic Draw from DCM",
+      "affected_vehicles": [
+        "2020-2023 Outback",
+        "2020-2023 Legacy",
+        "2022-2023 Forester"
+      ],
+      "symptom": "Dead battery after 2-3 days parked, multiple jump starts needed, DCM not entering sleep mode",
+      "cause": "Data Communication Module (STARLINK) fails to enter sleep mode properly",
+      "fix": "Update DCM firmware. Replace DCM if update does not resolve.",
+      "parts": [
+        "DCM firmware update, DCM module if needed"
+      ],
+      "labor_hours": 0.5
+    },
+    {
+      "id": "tsb_06-75-22",
+      "number": "06-75-22",
+      "type": "TSB",
+      "title": "Oil Consumption Concern - FB25 Engine",
+      "affected_vehicles": [
+        "2019-2023 Forester",
+        "2020-2023 Outback 2.5"
+      ],
+      "symptom": "Low oil level between changes, oil consumption above 1 qt per 1200 miles",
+      "cause": "Piston ring design, valve stem seal wear",
+      "fix": "Perform oil consumption test per procedure. If exceeds spec, short block replacement under warranty extension.",
+      "parts": [
+        "Short block assembly if needed"
+      ],
+      "labor_hours": "0.5 for test setup, 15-20 hours for short block if needed"
+    }
+  ],
+  "diagnostic_tools_required": {
+    "subaru_select_monitor": {
+      "name": "Subaru Select Monitor (SSM)",
+      "description": "Official Subaru diagnostic scan tool required for advanced diagnostics, reprogramming, and module configuration",
+      "capabilities": [
+        "Read/clear DTCs across all modules",
+        "Live data monitoring",
+        "ECM/TCM reprogramming",
+        "EyeSight calibration",
+        "Key programming",
+        "Immobilizer reset"
+      ]
+    },
+    "generic_obd2": {
+      "name": "Generic OBD-II Scanner",
+      "description": "Basic code reader for powertrain DTCs",
+      "capabilities": [
+        "Read/clear basic powertrain DTCs",
+        "Live data (limited)",
+        "Freeze frame data"
+      ],
+      "limitation": "Cannot access Subaru-specific modules (EyeSight, AWD, CVT advanced data)"
+    }
+  },
+  "data_sources": {
+    "nhtsa_api": "https://api.nhtsa.gov",
+    "data_date": "2026-03-13",
+    "note": "Complaints and recalls sourced from NHTSA public database. Known issues and diagnostic procedures compiled from field experience."
+  }
+}
